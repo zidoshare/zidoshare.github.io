@@ -1,6 +1,6 @@
 ---
 title: jpa规范的模拟数据生成代码
-tags: 
+tags:
   - spring-jpa
   - data
 createdDate: '2017-08-01'

@@ -1,6 +1,6 @@
 ---
 title: 一次spring boot干净结构设计纪录
-tags: 
+tags:
   - java
   - spring
   - spring boot
@@ -13,25 +13,25 @@ image: header.png
 
 # 前言
 
-其实以前对于java写出来的代码还是颇有微辞，特别是当写http服务的时候，写出来的代码难免有许多重复编写却又不得不写的代码，并且一些代码少了一些spring的味道，比如 __结果处理__、__日志纪录__ 等，即使说得再明白，每一位同事写出来的都多多少少会偏离，失败和异常的界限很多时候的处理不太符合统一的设计，而且对于返回的数据每一次都要用同意的结果处理类进行相关的处理，封装数据、失败原因、错误码、错误信息等等。当在协作的时候，同事在处理curd之余还需要考虑很多其他的事，写出来的代码也相当不clean。
+其实以前对于 java 写出来的代码还是颇有微辞，特别是当写 http 服务的时候，写出来的代码难免有许多重复编写却又不得不写的代码，并且一些代码少了一些 spring 的味道，比如 **结果处理**、**日志纪录** 等，即使说得再明白，每一位同事写出来的都多多少少会偏离，失败和异常的界限很多时候的处理不太符合统一的设计，而且对于返回的数据每一次都要用同意的结果处理类进行相关的处理，封装数据、失败原因、错误码、错误信息等等。当在协作的时候，同事在处理 curd 之余还需要考虑很多其他的事，写出来的代码也相当不 clean。
 
-所以，我希望能够通过定制一些spring的组件来做到将与业务无关的东西抽离出来，以更加‘spring’的方式来统一进行处理，努力以更好的设计来给代码带来一个良好的开端，当然其中也难免涉及到一些取舍权衡。
+所以，我希望能够通过定制一些 spring 的组件来做到将与业务无关的东西抽离出来，以更加‘spring’的方式来统一进行处理，努力以更好的设计来给代码带来一个良好的开端，当然其中也难免涉及到一些取舍权衡。
 
 # 目标
 
-* 统一的日志纪录，让每一次可能会导致数据异常的请求（增删改）更加清晰。
+- 统一的日志纪录，让每一次可能会导致数据异常的请求（增删改）更加清晰。
 
-* 统一的结果处理，代码只需要在正确的情况下，返回正确的数据即可，不再需要进行任何多余的操作，直接返回数据即可。
+- 统一的结果处理，代码只需要在正确的情况下，返回正确的数据即可，不再需要进行任何多余的操作，直接返回数据即可。
 
-* 统一的异常处理，能够自动处理一些通用的异常，例如数据校验、runtimeException等等，也能处理业务中的异常。根据需要能够返回一些简略的信息和相应的code给前端调试，纪录日志，让后端能够进行相应的排错。
+- 统一的异常处理，能够自动处理一些通用的异常，例如数据校验、runtimeException 等等，也能处理业务中的异常。根据需要能够返回一些简略的信息和相应的 code 给前端调试，纪录日志，让后端能够进行相应的排错。
 
-* 简单的注解鉴权，并且能够自动注入request生命周期用户对象。如果需要用户信息直接注入即可。
+- 简单的注解鉴权，并且能够自动注入 request 生命周期用户对象。如果需要用户信息直接注入即可。
 
 # 具体实现
 
 ## 统一日志处理
 
-可以通过很多种方式实现，我这里采用aop实现：
+可以通过很多种方式实现，我这里采用 aop 实现：
 
 ```java
 /**
@@ -137,7 +137,7 @@ public class RestControllerAspect {
 
 ## 统一的结果处理
 
-我希望能够不需要开发者再去手动执行类似`new Result().setSuccess(true).setCode(0).setData(...)`的方法。而是直接返回data。然后由统一的处理来进行结果处理。例如：
+我希望能够不需要开发者再去手动执行类似`new Result().setSuccess(true).setCode(0).setData(...)`的方法。而是直接返回 data。然后由统一的处理来进行结果处理。例如：
 
 ```java
 public Integer getOne(){
@@ -145,28 +145,27 @@ public Integer getOne(){
 }
 ```
 
-能够得到正常application/json响应头，以及类似如下的响应体
+能够得到正常 application/json 响应头，以及类似如下的响应体
 
 ```json
 {
-    "result":1,
-    "code":0,
-    "success":true
+  "result": 1,
+  "code": 0,
+  "success": true
 }
-
 ```
 
 当有异常时，能够得到类似如下的响应体：
 
 ```json
 {
-    "succuess":false,
-    "code":10000,
-    "message":"..."
+  "succuess": false,
+  "code": 10000,
+  "message": "..."
 }
 ```
 
-理论上来说无论方法如何返回，最终http结果都将写入response.body里面，也就是说无论什么框架，我们都能找到一个入口通过某种方式去切入，定制属于我们自己的响应体。经查，spring提供了`ResponseBodyAdvice`接口供我们去定制响应体。在此之前，先看看我们的返回实体类`Result`:
+理论上来说无论方法如何返回，最终 http 结果都将写入 response.body 里面，也就是说无论什么框架，我们都能找到一个入口通过某种方式去切入，定制属于我们自己的响应体。经查，spring 提供了`ResponseBodyAdvice`接口供我们去定制响应体。在此之前，先看看我们的返回实体类`Result`:
 
 ```java
 public class Result<T> implements Serializable {
@@ -282,21 +281,21 @@ public class GlobalResultHandler implements ResponseBodyAdvice {
 }
 ```
 
-注意，在beforeBodyWrite方法中，我们会判断是否是String类。
+注意，在 beforeBodyWrite 方法中，我们会判断是否是 String 类。
 
-在此需要稍微的了解一下spring对于响应体的处理，它抽象了一个`HttpMessageConverter`接口，能够对响应体进行各种处理，spring内置了9个转换类，分别是：
+在此需要稍微的了解一下 spring 对于响应体的处理，它抽象了一个`HttpMessageConverter`接口，能够对响应体进行各种处理，spring 内置了 9 个转换类，分别是：
 
-* ByteArrayHttpMessageConverter (添加octet-stream响应头)
-* StringHttpMessageConverter (能读取所有请求，并添加text/plain响应头 UTF-8编码)
-* StringHttpMessageConverter (能读取所有请求，text/plain响应头 ISO-8859-1编码)
-* ResourceHttpMessageConverter (octet-stream响应头)
-* SourceHttpMessageConverter (application/xml text/xml)
-* AllEncompassingFormHttpMessageConverter (表单处理相关的)
-* MappingJackson2HttpMessageConverter (读取响应json相关数据)
-* MappingJackson2HttpMessageConverter (同上，暂时不知道什么区别)
-* Jaxb2RootElementHttpMessageConverterJaxb2RootElementHttpMessageConverter (使用JAXB2处理xml消息)
+- ByteArrayHttpMessageConverter (添加 octet-stream 响应头)
+- StringHttpMessageConverter (能读取所有请求，并添加 text/plain 响应头 UTF-8 编码)
+- StringHttpMessageConverter (能读取所有请求，text/plain 响应头 ISO-8859-1 编码)
+- ResourceHttpMessageConverter (octet-stream 响应头)
+- SourceHttpMessageConverter (application/xml text/xml)
+- AllEncompassingFormHttpMessageConverter (表单处理相关的)
+- MappingJackson2HttpMessageConverter (读取响应 json 相关数据)
+- MappingJackson2HttpMessageConverter (同上，暂时不知道什么区别)
+- Jaxb2RootElementHttpMessageConverterJaxb2RootElementHttpMessageConverter (使用 JAXB2 处理 xml 消息)
 
-他们组成一个消息处理链，顺序匹配。知道遇到一个能处理此返回值的转换类。按照我们正常的json请求响应流程来说的话，会默认调用`MappingJackson2HttpMessageConverter`来进行相关的处理。但是有一个例外，就是在controller方法中返回的是字符串，spring会调用`StringHttpMessageConverter`类进行处理。这个转换类只接收String类型。如果我们返回了Result类，就会报类型转换异常。在此有两种解决方案，第一种是判断返回值，如果是String类型，则使用`jackson`/`fastjson`等进行json序列化转换成字符串。类似以下代码：
+他们组成一个消息处理链，顺序匹配。知道遇到一个能处理此返回值的转换类。按照我们正常的 json 请求响应流程来说的话，会默认调用`MappingJackson2HttpMessageConverter`来进行相关的处理。但是有一个例外，就是在 controller 方法中返回的是字符串，spring 会调用`StringHttpMessageConverter`类进行处理。这个转换类只接收 String 类型。如果我们返回了 Result 类，就会报类型转换异常。在此有两种解决方案，第一种是判断返回值，如果是 String 类型，则使用`jackson`/`fastjson`等进行 json 序列化转换成字符串。类似以下代码：
 
 ```java
 //实例化或者诸如ObjectMapper
@@ -313,9 +312,9 @@ if(body instanceof String){
 
 ```
 
-这种方式的好处是处理相当方便，代码量极少。但是缺点是查看响应头会发现，Content-Type是'text/plain'，当然绝大部分情况下，这是无所谓的。但是对于我这种强迫症来说，这是不能接受的，所以我采用了第二种方式：__自定义StringHttpMessageConverter__ 来实现我想要的效果。
+这种方式的好处是处理相当方便，代码量极少。但是缺点是查看响应头会发现，Content-Type 是'text/plain'，当然绝大部分情况下，这是无所谓的。但是对于我这种强迫症来说，这是不能接受的，所以我采用了第二种方式：**自定义 StringHttpMessageConverter** 来实现我想要的效果。
 
-看起来代码挺多，其实基本上都是直接复制的StringHttpMessageConverter的代码（233。
+看起来代码挺多，其实基本上都是直接复制的 StringHttpMessageConverter 的代码（233。
 
 ```java
 
@@ -376,11 +375,11 @@ public StringToResultHttpMessageConverter myConverter() {
 }
 ```
 
-方式注入即可，当然，理论上也可以直接通过ConfigureWebmvc直接覆盖掉原来的StringHttpMessageConverter。但是我这里没有这么做（因为我太菜，不敢改太多的东西233。这里有一个注意的点，前面已经知道，spring会顺序遍历这些消息转换类，所有我们应该把自定义的转换类添加到处理链的前面，否则还是会使用默认的StringHttpmessageConverter来进行处理。使用@Bean来标注的话，自动会放在最前面。
+方式注入即可，当然，理论上也可以直接通过 ConfigureWebmvc 直接覆盖掉原来的 StringHttpMessageConverter。但是我这里没有这么做（因为我太菜，不敢改太多的东西 233。这里有一个注意的点，前面已经知道，spring 会顺序遍历这些消息转换类，所有我们应该把自定义的转换类添加到处理链的前面，否则还是会使用默认的 StringHttpmessageConverter 来进行处理。使用@Bean 来标注的话，自动会放在最前面。
 
 ## 数据校验+统一异常处理
 
-对于数据校验可以说的其实挺少的，就那么写注解，只是需要注意controller的直接参数校验时，@Validate注解应该加载controller类上，例如这样：
+对于数据校验可以说的其实挺少的，就那么写注解，只是需要注意 controller 的直接参数校验时，@Validate 注解应该加载 controller 类上，例如这样：
 
 ```java
 @Validated //注解加在这里才会生效
@@ -393,9 +392,9 @@ public class TestController(){
 }
 ```
 
-另外还有就是，如果是controller直接接收的entity实体类，并且在实体类中加入了校验，当在使用spring-boot-jpa hibernate增删的时候也会自动进行校验，有时候挺烦的，我们都已经把数据校验好了，这一层是可以绕过的，可以直接在properties文件中，添加`spring.jpa.properties.javax.persistence.validation.mode=none`即可。
+另外还有就是，如果是 controller 直接接收的 entity 实体类，并且在实体类中加入了校验，当在使用 spring-boot-jpa hibernate 增删的时候也会自动进行校验，有时候挺烦的，我们都已经把数据校验好了，这一层是可以绕过的，可以直接在 properties 文件中，添加`spring.jpa.properties.javax.persistence.validation.mode=none`即可。
 
-然后是异常处理，这个网上就相当多了，直接使用RestControllerAdvice注解标注即可，我在这里面添加了对于参数校验异常的处理。示例：
+然后是异常处理，这个网上就相当多了，直接使用 RestControllerAdvice 注解标注即可，我在这里面添加了对于参数校验异常的处理。示例：
 
 ```java
 @RestControllerAdvice
@@ -491,7 +490,7 @@ public class ExceptionAdvice{
 }
 ```
 
-其中有个业务异常类，非常简单，就是正常的实现自RuntimeException，只不过这个类必须返回响应的code。
+其中有个业务异常类，非常简单，就是正常的实现自 RuntimeException，只不过这个类必须返回响应的 code。
 
 ```java
 public abstract class CommonBusinessException extends RuntimeException {
@@ -506,11 +505,11 @@ public abstract class CommonBusinessException extends RuntimeException {
 
 ## 简单的注解鉴权
 
-因为目前做的项目挺简单的，所以也就没有使用什么框架来进行权限管理，这里只是自己进行了一些权限校验，应该以后会单独的写一篇关于`spring security`定制的权限处理（因为spring security对于现在的前后端分离式开发的流程并不是很友好）。
+因为目前做的项目挺简单的，所以也就没有使用什么框架来进行权限管理，这里只是自己进行了一些权限校验，应该以后会单独的写一篇关于`spring security`定制的权限处理（因为 spring security 对于现在的前后端分离式开发的流程并不是很友好）。
 
 > 注意，用户相关的注入，觉得不实用可以跳过，其实我也觉得实用性不大，不过比较喜欢折腾，所以聊胜于无嘛。
 
-首先在用户这一块。我们的用户总共就两个角色，并且角色之间属性不大相同。如果分开处理虽然也行，但是感觉代码比较割裂，并且有时候两种用户其实拥有一样的权限，大多数时候呢，我们获取信息也就是获取个id，name,avatar之类的，两种用户都有，基于此，为了能够简单好用一点，我抽象了一个User接口，仅提供几个比较通用的属性：
+首先在用户这一块。我们的用户总共就两个角色，并且角色之间属性不大相同。如果分开处理虽然也行，但是感觉代码比较割裂，并且有时候两种用户其实拥有一样的权限，大多数时候呢，我们获取信息也就是获取个 id，name,avatar 之类的，两种用户都有，基于此，为了能够简单好用一点，我抽象了一个 User 接口，仅提供几个比较通用的属性：
 
 ```java
 public interface User {
@@ -533,11 +532,11 @@ public interface User {
 }
 ```
 
-除了两种角色之外，还提供ALL/NONE角色，分别对应的是`具有任意权限的用户`和`匿名用户`，主要用来进行鉴权。
+除了两种角色之外，还提供 ALL/NONE 角色，分别对应的是`具有任意权限的用户`和`匿名用户`，主要用来进行鉴权。
 
-我们的系统里面两种用户是用两个表存储的（其他属性全不一样= =）。所以就让两个实体类分别实现User接口即可。
+我们的系统里面两种用户是用两个表存储的（其他属性全不一样= =）。所以就让两个实体类分别实现 User 接口即可。
 
-然后使用这个接口进行相关角色信息的简单缓存，我们使用redis进行缓存，也使用一个缓存实现类来进行缓存操作。
+然后使用这个接口进行相关角色信息的简单缓存，我们使用 redis 进行缓存，也使用一个缓存实现类来进行缓存操作。
 
 ```java
 
@@ -629,7 +628,7 @@ public class DefaultCachedUser implements User {
 }
 ```
 
-之后就可以随意使用喜欢的方式将这个类缓存下来，然后进行读取即可。在这个时候，我多做了一步。考虑spring提供一个Request生命周期的bean注入，我可以直接将这个request生命周期的bean注入到ioc，然后只需要在使用的时候@Autowire即可。类似这样：
+之后就可以随意使用喜欢的方式将这个类缓存下来，然后进行读取即可。在这个时候，我多做了一步。考虑 spring 提供一个 Request 生命周期的 bean 注入，我可以直接将这个 request 生命周期的 bean 注入到 ioc，然后只需要在使用的时候@Autowire 即可。类似这样：
 
 ```java
 /**
@@ -683,7 +682,7 @@ public class DefaultCachedUser implements User {
 
 ```
 
-注意RequestScope必须设置proxyMode=ScopedProxyMode.TARGET_CLASS来进行代理。使用了代理之后，就可以随意注入到任何需要使用的类和方法中了，而且最主要是，当不使用类属性时，不会去查询缓存或者数据库，可以说相当方便了。例如：
+注意 RequestScope 必须设置 proxyMode=ScopedProxyMode.TARGET_CLASS 来进行代理。使用了代理之后，就可以随意注入到任何需要使用的类和方法中了，而且最主要是，当不使用类属性时，不会去查询缓存或者数据库，可以说相当方便了。例如：
 
 ```java
 @Component
@@ -703,9 +702,9 @@ public class Test{
 
 ```
 
-当然这样做还是有坏处的，注入的类 __一定不能使用json去序列化__ ,序列化会报错。
+当然这样做还是有坏处的，注入的类 **一定不能使用 json 去序列化** ,序列化会报错。
 
-其中有一个方法是`userService.getCurrentUser()`。这个类的实现需要注意，获取当前用户，应该是与Request进行绑定的，获取当前request，然后根据业务进行相关参数获取并查询用户，类似这样：
+其中有一个方法是`userService.getCurrentUser()`。这个类的实现需要注意，获取当前用户，应该是与 Request 进行绑定的，获取当前 request，然后根据业务进行相关参数获取并查询用户，类似这样：
 
 ```java
 @Service
@@ -738,7 +737,7 @@ public @interface NeedLogin {
 }
 ```
 
-然后直接使用aop实现权限校验：
+然后直接使用 aop 实现权限校验：
 
 ```java
 @Aspect
@@ -791,4 +790,4 @@ public class PermissionAspect {
 
 # 写在最后
 
-其实当我写完，我发现其实没做多少事情，或者说做了一些事情，但是对于真正写代码的帮助始终还是有限的，每个人的理解都不一样，我把一切想得很美好，当在实践的时候，却还是不得不一遍又一遍的review同事的代码，来保证大家在方向上不会出现太大的差错。但是我自己理解的设计就这样，只能靠积累，一点点的去尝试优化，也通过这样做去一点点的熟悉源码，然后反过来再帮助自己更轻松地搬砖，形成良性循环，毕竟我还是不想一直局限于curd。我能慢慢成长，这样就够了。
+其实当我写完，我发现其实没做多少事情，或者说做了一些事情，但是对于真正写代码的帮助始终还是有限的，每个人的理解都不一样，我把一切想得很美好，当在实践的时候，却还是不得不一遍又一遍的 review 同事的代码，来保证大家在方向上不会出现太大的差错。但是我自己理解的设计就这样，只能靠积累，一点点的去尝试优化，也通过这样做去一点点的熟悉源码，然后反过来再帮助自己更轻松地搬砖，形成良性循环，毕竟我还是不想一直局限于 curd。我能慢慢成长，这样就够了。

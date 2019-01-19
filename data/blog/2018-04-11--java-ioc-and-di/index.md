@@ -1,6 +1,6 @@
 ---
 title: java ioc和di的实现与构思
-tags: 
+tags:
   - java
   - ioc
   - di
@@ -11,60 +11,58 @@ origin: true
 image: header.png
 ---
 
-
 # 写在前面
 
-最近想要实现一个java web框架。但是一直有一些细节难以敲定和想通，当然，也碍于个人技术有限。
+最近想要实现一个 java web 框架。但是一直有一些细节难以敲定和想通，当然，也碍于个人技术有限。
 
-我对于学习一直是觉得实践才是硬道理，我一直没有去深入的看spring的源码，是因为我觉得自己还没有实现过，很难体会那种框架的核心痛点，也就没有那种茅塞顿开的感觉，我喜欢这种感觉。
+我对于学习一直是觉得实践才是硬道理，我一直没有去深入的看 spring 的源码，是因为我觉得自己还没有实现过，很难体会那种框架的核心痛点，也就没有那种茅塞顿开的感觉，我喜欢这种感觉。
 
-所以我想先实现一个框架，了解其中痛点，然后再深入学习spring源码，来看看大神如何解决这些问题的。
+所以我想先实现一个框架，了解其中痛点，然后再深入学习 spring 源码，来看看大神如何解决这些问题的。
 
 我的框架命名为[bone](https://github.com/zidoshare/bone)，我希望它不一定是多么的成熟，但是我希望它一定是小巧的，能够支撑起整个身体的框架。
 
-对于功能的展望，我还是希望它麻雀虽小，五脏俱全，具备ioc、di、aop、mvc、orm等功能。在实现中，很小部分参考了[latke](https://github.com/b3log/latke)（日志）和spring的代码（异常）。
+对于功能的展望，我还是希望它麻雀虽小，五脏俱全，具备 ioc、di、aop、mvc、orm 等功能。在实现中，很小部分参考了[latke](https://github.com/b3log/latke)（日志）和 spring 的代码（异常）。
 
-本篇将介绍自己对于ioc和di的一些思考，具体代码是对D大翻译的[jsr-330](http://blog.csdn.net/dl88250/article/details/4838803)规范的实现。
+本篇将介绍自己对于 ioc 和 di 的一些思考，具体代码是对 D 大翻译的[jsr-330](http://blog.csdn.net/dl88250/article/details/4838803)规范的实现。
 
-# 对与ioc与di的构思
+# 对与 ioc 与 di 的构思
 
-对于ioc和di，我觉得主要考虑的问题有：
+对于 ioc 和 di，我觉得主要考虑的问题有：
 
-* 依赖解析
-* 依赖缺失
-* 循环依赖
+- 依赖解析
+- 依赖缺失
+- 循环依赖
 
-对于这几点，依赖的解析还好说，我们可以对每个bean进行透彻的分析。为每个需要注入的构造方法、普通方法、属性进行分析，通过反射获取所需要的属性。
+对于这几点，依赖的解析还好说，我们可以对每个 bean 进行透彻的分析。为每个需要注入的构造方法、普通方法、属性进行分析，通过反射获取所需要的属性。
 重要的是，如何解决循环依赖和依赖缺失的问题？
 
-在最开始，我第一次实现ioc和di的时候，根本没有好的方法，所以我想到了一种解决方案。我把所有的需要执行的实例化/构造方法/普通方法/属性。看做时一个任务（Task）。
+在最开始，我第一次实现 ioc 和 di 的时候，根本没有好的方法，所以我想到了一种解决方案。我把所有的需要执行的实例化/构造方法/普通方法/属性。看做时一个任务（Task）。
 
 然后把这些任务统统一股脑放在队列中，然后对队列执行出队操作(pop)。然后新建一个失败队列，如果执行失败，也就是说依赖在容器中找不到，那么进入（push）失败队列。
 然后待执行任务队列为空时，把失败队列做为新的任务队列，继续循环。
 
 这样不停的去循环执行，如果某一次，任务队列的长度和失败队列的长度相等，那么代表所有的待执行任务都执行失败了，那么肯定是依赖缺失或者循环依赖了。
 
-然后我按照这种思路去做了第一个版本的ioc。做完后发现，这个想法简直是太蠢了，报错根本不精准，也不知道是哪个任务因为什么原因失败了，是依赖缺失？还是循环依赖。另外还有问题是，
-有时候task执行会再生成新的task，这种情况也根本检测不出来。
+然后我按照这种思路去做了第一个版本的 ioc。做完后发现，这个想法简直是太蠢了，报错根本不精准，也不知道是哪个任务因为什么原因失败了，是依赖缺失？还是循环依赖。另外还有问题是，
+有时候 task 执行会再生成新的 task，这种情况也根本检测不出来。
 
 所以我开始寻找其他的解决方案。
 
-在某一次突然的想法中，徒然发现，这些bean和依赖关系不正好能够对应上数据结构中的有向图(arc graph)结构吗？
-然后我完全可以通过有向图的检测环的算法来检测是否有循环依赖，另外可以通过检测每个任务所需的bean和这个任务所对应的顶点（node）数量是否想等不就能够判定依赖缺失的问题了吗？
-所以，我依照这种想法，开始实现自己的ioc和di（我也不知道spring/latke是否是这样实现的，任性～）。
-
+在某一次突然的想法中，徒然发现，这些 bean 和依赖关系不正好能够对应上数据结构中的有向图(arc graph)结构吗？
+然后我完全可以通过有向图的检测环的算法来检测是否有循环依赖，另外可以通过检测每个任务所需的 bean 和这个任务所对应的顶点（node）数量是否想等不就能够判定依赖缺失的问题了吗？
+所以，我依照这种想法，开始实现自己的 ioc 和 di（我也不知道 spring/latke 是否是这样实现的，任性～）。
 
 # 注入实现
 
-对每个需要生成的bean，我都会生成一个描述类(Definition)。它会存储每个bean的具体构建方式、依赖、以及可能执行的方法、需要被注入的属性等等。
+对每个需要生成的 bean，我都会生成一个描述类(Definition)。它会存储每个 bean 的具体构建方式、依赖、以及可能执行的方法、需要被注入的属性等等。
 这几个都分散在类 DefConstruction(描述构造器),DefProperty(描述属性)，DelayMethod(描述方法)。通过这些类。构造出一个一个的描述。然后解析这些描述，就能够生成图结构，最后进入我们的分析执行阶段啦。
 
-对与容器注入，为了实现class扫描和xml以及后来可能会有的其他注入方式，我抽象除了AbsBeanParser类。它能够通过子类获取的Definitions生成图结构，并执行注入。
-AnnotationParser是注解注入bean的扫描器，而XmlParser是xml注入bean的扫描器。xml目前对于bean的注入还是只是支持比较简单的语法。
-主要是AnnotationParser注解扫描器。会尽可能的对每个bean的构造器，属性，方法去分析，以生成合适的Definition。从而实现类似Spring bean注入的体验(当然还是差了很大一截)。
+对与容器注入，为了实现 class 扫描和 xml 以及后来可能会有的其他注入方式，我抽象除了 AbsBeanParser 类。它能够通过子类获取的 Definitions 生成图结构，并执行注入。
+AnnotationParser 是注解注入 bean 的扫描器，而 XmlParser 是 xml 注入 bean 的扫描器。xml 目前对于 bean 的注入还是只是支持比较简单的语法。
+主要是 AnnotationParser 注解扫描器。会尽可能的对每个 bean 的构造器，属性，方法去分析，以生成合适的 Definition。从而实现类似 Spring bean 注入的体验(当然还是差了很大一截)。
 
-我对每个需要扫描的类，大概分为两种大类型，一种是直接直接方法生成bean的，这种指需要代理执行方法，并向方法中提供相关参数即可。
-一种是Component类，这种是类的实例化交给ioc的，这种类会尽量根据构造函数进行实例化。
+我对每个需要扫描的类，大概分为两种大类型，一种是直接直接方法生成 bean 的，这种指需要代理执行方法，并向方法中提供相关参数即可。
+一种是 Component 类，这种是类的实例化交给 ioc 的，这种类会尽量根据构造函数进行实例化。
 
 具体代码如下，比较混乱，也贴上，希望能有帮助吧
 
@@ -339,10 +337,9 @@ public class AnnotationParser extends AbsBeanParser {
 
 ```
 
-然后获取到Definition集合之后遍历每一个描述，找到其中每个需要执行的任务并实例化，然后注入到图结构中，建立每个bean的依赖关系。
+然后获取到 Definition 集合之后遍历每一个描述，找到其中每个需要执行的任务并实例化，然后注入到图结构中，建立每个 bean 的依赖关系。
 
-通过Definition构造图的代码如下：
-
+通过 Definition 构造图的代码如下：
 
 ```java
 /**
@@ -351,7 +348,7 @@ public class AnnotationParser extends AbsBeanParser {
  * @author zido
  * @since 2017/23/21 下午2:23
  */
-public abstract class AbsBeanParser implements IBeanParser 
+public abstract class AbsBeanParser implements IBeanParser
 /**
      * 通过Bean的定义来生成实例
      *
@@ -461,21 +458,22 @@ public abstract class AbsBeanParser implements IBeanParser
 出于本身这个项目也是个人练习所用，所以我在某些问题上是真的纠结了很久，对与图的实现，都采用了非常复杂的继承关系。
 想要高度抽象，结果个人技术不精，没能完全的抽象好，不过也还是能看。
 ![PostGraph.java继承关系图](http://odp22tnw6.bkt.clouddn.com/blog/content/graph-st.png)。
-其中 Graph类是整个图结构的接口，ArcGraph是有向图抽象类，OrthogonalArcGraph是有向图的十字链表实现。而PostGraph是扩展自有向图，用来容纳整个任务执行的图结构。
+其中 Graph 类是整个图结构的接口，ArcGraph 是有向图抽象类，OrthogonalArcGraph 是有向图的十字链表实现。而 PostGraph 是扩展自有向图，用来容纳整个任务执行的图结构。
 
 为什么选择十字链表实现，是因为十字链表是图结构存储的非常好的一种方式，它将邻接表和逆邻接表结合起来，使得每个顶点都能访问它所有对应的弧，以及指向它的顶点和它指向的顶点，而不需要重新循环，
 这对于我们依赖图构建有非常大的帮助。
 
 ## 简单介绍图在十字链表的实现（具体请查看专业博文）：
 
-图由顶点和弧组成。在 A->b这个图中，A、b为顶点，而这个箭头如何表示呢？它用弧头和弧尾组成，A的这一边为弧头，b的这一边为弧尾。
+图由顶点和弧组成。在 A->b 这个图中，A、b 为顶点，而这个箭头如何表示呢？它用弧头和弧尾组成，A 的这一边为弧头，b 的这一边为弧尾。
 每个顶点类存储四个数据（所有顶点类需要单独维护，能够通过标示访问即可），分别为当前顶点标示(index)，具体数据(data),firstIn(第一个指向此顶点的弧)，firstOut(此顶点第一个出去的弧)。
-而弧类也存储四个数据，分别为tailVex(弧尾所在的点标识),headVex(弧头所在的点标识),headLink(弧头指向想通顶点的弧),tailLink(弧尾指向相同顶点的弧)。
+而弧类也存储四个数据，分别为 tailVex(弧尾所在的点标识),headVex(弧头所在的点标识),headLink(弧头指向想通顶点的弧),tailLink(弧尾指向相同顶点的弧)。
 
 具体看下图。
 ![](http://odp22tnw6.bkt.clouddn.com/blog/content/graph.jpg)。
 
 接下来就是靠代码去维护这一段关系，其实主要是表现在添加弧的时候去维护这个关系，具体代码：
+
 ```java
     public class OrthogonalArcGraph<T>{
         /**
@@ -494,18 +492,18 @@ public abstract class AbsBeanParser implements IBeanParser
             if (headNode == null) {
                 throw new NoSuchNodeException(head);
             }
-        
+
             if (get(tail, head) != null) {
                 return;
             }
-        
+
             OrthogonalArc arc = new OrthogonalArc(tail, head);
-        
+
             //处理弧头顶点
             //替代节点，完成替代
             arc.setTailLink(tailNode.getFirstOut());
             tailNode.setFirstOut(arc);
-        
+
             //处理弧尾顶点
             arc.setHeadLink(headNode.getFirstIn());
             headNode.setFirstIn(arc);
@@ -517,6 +515,6 @@ public abstract class AbsBeanParser implements IBeanParser
 
 # 写在最后
 
-ioc/di的实现还有很多的缺陷，但是实现了基本功能，剩下的只是细节处理了，将暂时放下，去实现接下来aop和mvc模块，也是非常难的模块。
-不过还好我时间还算充裕，我将努力去实现它，如果你对我的实现感兴趣，不妨给个star，项目地址在这里[bone](https://github.com/zidoshare/bone)。
+ioc/di 的实现还有很多的缺陷，但是实现了基本功能，剩下的只是细节处理了，将暂时放下，去实现接下来 aop 和 mvc 模块，也是非常难的模块。
+不过还好我时间还算充裕，我将努力去实现它，如果你对我的实现感兴趣，不妨给个 star，项目地址在这里[bone](https://github.com/zidoshare/bone)。
 希望能有大佬多提意见，也希望有志同道合的朋友和我一起讨论开发，谢谢！
