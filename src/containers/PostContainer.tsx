@@ -1,12 +1,11 @@
 import * as React from 'react'
 import { LayoutProps } from '../components/Layout'
 import { MarkdownRemark, MarkdownRemarkConnection, Site, DataJson, ImageSharp, Query } from '../graphql-types'
-import { WithLayout } from '../containers/LayoutContainer'
+import { mapDispatchToProps, HeaderDisptacherProps, WithLayout } from './LayoutContainer'
 import BlogPost from '../components/BlogPost'
-import { graphql, StaticQuery } from 'gatsby'
 import { HeaderType } from '../contants/header'
-import Position from '../components/base/Position'
-interface BlogPostProps extends LayoutProps {
+import { connect } from 'react-redux'
+interface BlogPostProps extends LayoutProps, HeaderDisptacherProps {
   data: {
     post: MarkdownRemark
     recents: MarkdownRemarkConnection
@@ -17,7 +16,8 @@ interface BlogPostProps extends LayoutProps {
     header: ImageSharp
   }
 }
-const PostPage = (props: BlogPostProps) => {
+
+export default (props: BlogPostProps) => {
   const { post, dataJson } = props.data
   const { slug } = post.fields
   const gitmentOptions = dataJson.gitment
@@ -33,5 +33,3 @@ const PostPage = (props: BlogPostProps) => {
     </WithLayout>
   )
 }
-
-export default PostPage

@@ -6,13 +6,17 @@ import { Dispatch, bindActionCreators } from 'redux'
 import { showHeader, HeaderAction } from '../actions/header'
 import { HeaderType } from '../contants/header'
 import { InnerProps } from '../components/inner'
+
+export interface HeaderDisptacherProps {
+  showHeader(headerType: HeaderType, data?: InnerProps): HeaderAction
+}
 function mapStateToProps(state: StoreState) {
   return {
     headerType: state.header.headerType,
     innerProps: state.header.data,
   }
 }
-function mapDispatchToProps(dispatch: Dispatch) {
+export const mapDispatchToProps = (dispatch: Dispatch<HeaderAction>) => {
   return bindActionCreators(
     {
       showHeader,
