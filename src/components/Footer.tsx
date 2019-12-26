@@ -15,7 +15,7 @@ export default () => (
             }
           }
         `}
-        render={(data: Query) => <p>Copyright © 2018 - {data.dataJson.author.name}. All Rights Reserved. </p>}
+        render={(data: Query) => <p>Copyright © 2018 - {data.dataJson.author.name}. All Rights Reserved.@<a href="www.beian.miit.gov.cn">蜀ICP备18004671号</a> </p>}
       />
       <p>power by GatsbyJs</p>
     </div>
