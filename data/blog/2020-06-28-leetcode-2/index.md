@@ -8,6 +8,7 @@ createdDate: '2020-06-28'
 updatedDate: '2020-06-28'
 draft: false
 origin: true
+image: header.png
 ---
 
 ```c
