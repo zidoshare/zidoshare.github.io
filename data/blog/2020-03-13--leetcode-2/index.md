@@ -4,16 +4,17 @@ tags:
   - leetcode
   - 算法
   - learning
-createdDate: '2020-06-28'
-updatedDate: '2020-06-28'
+createdDate: '2020-03-13'
+updatedDate: '2020-03-13'
 draft: false
 origin: true
 image: header.png
 ---
 
-```c
 
 没什么好说的。
+
+```c
 /*
  * @lc app=leetcode.cn id=2 lang=c
  *
