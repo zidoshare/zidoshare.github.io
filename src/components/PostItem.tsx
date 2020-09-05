@@ -24,6 +24,7 @@ export default (props: PostItemProps) => {
       <div className={classes.itemMain}>
         <div className={classes.cover}>
           <Link to={href}>
+<<<<<<< HEAD
             <StaticQuery
               query={graphql`
                 {
@@ -55,6 +56,9 @@ export default (props: PostItemProps) => {
                 }
               }}
             />
+=======
+            <img {...cover} />
+>>>>>>> dev
           </Link>
         </div>
         <div className={classes.itemElse}>
