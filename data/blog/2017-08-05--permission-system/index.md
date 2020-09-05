@@ -1,6 +1,6 @@
 ---
 title: 怎样构建一个灵活的权限系统
-tags: 
+tags:
   - java
   - permission
 createdDate: '2017-08-05'
@@ -16,9 +16,9 @@ image: header.png
 
 好吧，我服，然后开始对权限系统做思考，以下是思路（前方人格分裂？#雾）：
 
-这样的权限系统很简单嘛，我把每个角色可访问的路由，使用json格式存入数据库不就得了。
+这样的权限系统很简单嘛，我把每个角色可访问的路由，使用 json 格式存入数据库不就得了。
 （你傻啊？存路由？从哪儿取这些路由啊？）。
-恩，有道理，我 把网站所有的路由全部存在数据库，然后使用id做唯一标示，然后把角色允许访问的这些id使用Json格式存入数据库。
+恩，有道理，我 把网站所有的路由全部存在数据库，然后使用 id 做唯一标示，然后把角色允许访问的这些 id 使用 Json 格式存入数据库。
 （不允许的链接地址，你虽然会拒绝访问，但是你的按钮还在啊喂！比如【学生管理】这个菜单项，你点进去会拒绝访问，但是你的这个菜单项还在菜单里啊）。
 恩...好像有道理，那我使用不同的模板，不就行啦。
 
@@ -43,8 +43,6 @@ image: header.png
 
 3、规范性，这是一个隐式的好处，它将我们的所有的链接功能，都做了很好的管理，不再杂乱，而我们每次去添加一个路由，都需要添加在树中，很规范，功能的设计更加的模块化了（怎么模块化？后面再说）
 
-
-
 说了这么多，准备上代码啦~
 
 （不慌啊喂，树到底是啥概念，完全不懂啊？）
@@ -64,12 +62,12 @@ public class Node{
 }
 ```
 
-第二种是使用二叉链表，其实也就是在节点中只存储两个子节点，分别为leftChild,nextSibling。分别就是自己的第一个孩子以及右边的兄弟
+第二种是使用二叉链表，其实也就是在节点中只存储两个子节点，分别为 leftChild,nextSibling。分别就是自己的第一个孩子以及右边的兄弟
 大概是这样：
 
 ```java
 public class Node{
-    
+
     /*节点信息*/
     ...
     /*子节点链表*/
@@ -78,10 +76,9 @@ public class Node{
 }
 ```
 
-
 我是使用的第二种方式，以下是我的代码（小朋友不要轻易模仿）
 
-## TreeNode类 接口
+## TreeNode 类 接口
 
 ```java
 /**
@@ -109,7 +106,8 @@ public interface TreeNode {
     public TreeNode getNextSibling();
 }
 ```
-## Mapping类
+
+## Mapping 类
 
 ```java
 
@@ -175,9 +173,9 @@ public class Mapping extends BaseMapping<Mapping> implements TreeNode {
 
 ```
 
-## ArrayTree类
+## ArrayTree 类
 
-> 此处更新于2016.12.30
+> 此处更新于 2016.12.30
 
 ```java
 /**
@@ -414,7 +412,7 @@ public class Mapping extends BaseMapping<Mapping> implements TreeNode {
 
 ## 使用示例
 
-> 此处更新于2016.12.30 ，读取xml权限信息，并持久化到数据库（为了方便= =）
+> 此处更新于 2016.12.30 ，读取 xml 权限信息，并持久化到数据库（为了方便= =）
 
 ```java
 
@@ -515,15 +513,15 @@ public static void generatorXML(ArrayTree<Mapping> tree) throws IOException {
 
 ```
 
-## xml文件示例
-
+## xml 文件示例
 
 <!--0：功能，1：视图模块，2：菜单，3：二级菜单，以后多级菜单，依次类推-->
-[b96984f14cd146c496e40871d973f594-permission.xml](https://img.hacpai.com/file/2016/12/b96984f14cd146c496e40871d973f594-permission.xml) 
 
+[b96984f14cd146c496e40871d973f594-permission.xml](https://img.hacpai.com/file/2016/12/b96984f14cd146c496e40871d973f594-permission.xml)
 
-BaseController完成基础权限地图处理操作
-```java 
+BaseController 完成基础权限地图处理操作
+
+```java
 //基础渲染方法
 public void index() {
     fillHeaderAndFooter();
@@ -671,9 +669,9 @@ public void fillHeaderAndFooter() {
 
 ```
 
-然后controller几乎可以直接使用super.index()，完成大部分权限地图处理操作（同时也生成了菜单、视图，后来的开发人员也能够很简单的使用，直接专注于功能，而要达到这些，只需要在xml文件中简单添加菜单
+然后 controller 几乎可以直接使用 super.index()，完成大部分权限地图处理操作（同时也生成了菜单、视图，后来的开发人员也能够很简单的使用，直接专注于功能，而要达到这些，只需要在 xml 文件中简单添加菜单
 视图信息就行了）
-classController示例
+classController 示例
 
 ```java
 
@@ -804,10 +802,10 @@ public class ClassController extends BaseController {
 
 ```
 
-
-而在前台（这里使用的freemarker），就拥有一个遍历的机会了，这样把每个模块也就分开了，最主要还是，不能显示的导航也去掉了，在单独的模块里面可以继续做类似的遍历。
+而在前台（这里使用的 freemarker），就拥有一个遍历的机会了，这样把每个模块也就分开了，最主要还是，不能显示的导航也去掉了，在单独的模块里面可以继续做类似的遍历。
 
 填充侧边导航
+
 ```html
 
   <div class="tip-container">
@@ -820,10 +818,11 @@ public class ClassController extends BaseController {
             </#list>
         </ul>
     </div>
-	
+
 ```
 
 填充内容
+
 ```html
 
 <div id="page-wrapper">
@@ -836,11 +835,10 @@ public class ClassController extends BaseController {
 
 ```
 
-
-
-以上使用的JFinal框架，大同小异，我二次开发过sym，简单说明一下，这里没有用latke那种先取模板再在model中设置参数（因为JFinal在这方面没有专门的使用json），而是直接在request里面设置参数，然后渲染模板（这是基类，渲染在子类里，这里没有）。
+以上使用的 JFinal 框架，大同小异，我二次开发过 sym，简单说明一下，这里没有用 latke 那种先取模板再在 model 中设置参数（因为 JFinal 在这方面没有专门的使用 json），而是直接在 request 里面设置参数，然后渲染模板（这是基类，渲染在子类里，这里没有）。
 
 子类重写渲染示例
+
 ```java
     /**
      * 重写index方法，渲染为自己的首页
@@ -848,17 +846,17 @@ public class ClassController extends BaseController {
     @Override
     public void index() {
         super.index();
-        
+
         //对roleTree继续做处理
         ...
-        
+
         //----处理结束----
-        
+
         render("index.ftl");
     }
 ```
 
-![结构.png](https://img.hacpai.com/file/85489728614746dcb54f4a12eb393d3f/结构.png) 
+![结构.png](https://img.hacpai.com/file/85489728614746dcb54f4a12eb393d3f/结构.png)
 
 鉴于有人看不懂代码，那么明确的给出一个树结构图。
 但是画的丑，不要介意~
@@ -869,19 +867,18 @@ public class ClassController extends BaseController {
 
 管理员视图
 
-![5dedc067d7594bfdb7e05677ff687f73.png](https://img.hacpai.com/file/2016/12/5dedc067d7594bfdb7e05677ff687f73.png) 
+![5dedc067d7594bfdb7e05677ff687f73.png](https://img.hacpai.com/file/2016/12/5dedc067d7594bfdb7e05677ff687f73.png)
 
-![3773c3a74e5746b18def8be0ef7d570d.png](https://img.hacpai.com/file/2016/12/3773c3a74e5746b18def8be0ef7d570d.png) 
+![3773c3a74e5746b18def8be0ef7d570d.png](https://img.hacpai.com/file/2016/12/3773c3a74e5746b18def8be0ef7d570d.png)
 
 普通学生视图
 
-![45c0b4db6f6f46708c30dbd4fda3277f.png](https://img.hacpai.com/file/2016/12/45c0b4db6f6f46708c30dbd4fda3277f.png) 
+![45c0b4db6f6f46708c30dbd4fda3277f.png](https://img.hacpai.com/file/2016/12/45c0b4db6f6f46708c30dbd4fda3277f.png)
 
-
-![2b3ad34bbeec4fd3b764b8f87c89dc65.png](https://img.hacpai.com/file/2016/12/2b3ad34bbeec4fd3b764b8f87c89dc65.png) 
+![2b3ad34bbeec4fd3b764b8f87c89dc65.png](https://img.hacpai.com/file/2016/12/2b3ad34bbeec4fd3b764b8f87c89dc65.png)
 
 教师视图
 
-![87df3f4b09824fc4a3ec35955c66cb37.png](https://img.hacpai.com/file/2016/12/87df3f4b09824fc4a3ec35955c66cb37.png) 
+![87df3f4b09824fc4a3ec35955c66cb37.png](https://img.hacpai.com/file/2016/12/87df3f4b09824fc4a3ec35955c66cb37.png)
 
 ![a23b3c65a6b84e21ac664e6878492da1.png](https://img.hacpai.com/file/2016/12/a23b3c65a6b84e21ac664e6878492da1.png)

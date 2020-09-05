@@ -1,8 +1,6 @@
 ---
 title: docker学习纪录
-original: true
-title: docker学习纪录
-tags: 
+tags:
   - docker
   - learning
 createdDate: '2018-06-13'
@@ -12,27 +10,28 @@ origin: true
 image: header.png
 ---
 
-# docker安装
+# docker 安装
 
 ```shell
 yum update
 curl -fsSL https://get.docker.com/ | sh
 service docker start
 ```
-使docker开机启动 `systemctl enable docker`
 
-> enable:开机启动  start:启动 stop:停止
+使 docker 开机启动 `systemctl enable docker`
 
-设置docker镜像加速器
+> enable:开机启动 start:启动 stop:停止
 
-访问[阿里云容器服务](https://cr.console.aliyun.com/#/accelerator)，可以看到对应的加速器地址以及执行的命令，可以说想当方便了，直接ctrl+c ctrl+v
+设置 docker 镜像加速器
+
+访问[阿里云容器服务](https://cr.console.aliyun.com/#/accelerator)，可以看到对应的加速器地址以及执行的命令，可以说想当方便了，直接 ctrl+c ctrl+v
 ![我来写代码啦](./images/ctrlc.jpg)
 
-至此，docker就安装完毕，也可以[手动安装docker](https://docs.docker.com/install/linux/docker-ce/centos/#install-docker-ce)
+至此，docker 就安装完毕，也可以[手动安装 docker](https://docs.docker.com/install/linux/docker-ce/centos/#install-docker-ce)
 
 # 学习笔记
 
-晚上有太多docker相关介绍，不再重新整理，仅仅纪录一些docker需要注意的笔记
+晚上有太多 docker 相关介绍，不再重新整理，仅仅纪录一些 docker 需要注意的笔记
 
 镜像是容器的基础,每次执行 docker run 的时候都会指定哪个镜像作为容器运
 行的基础。
@@ -52,4 +51,4 @@ Docker 在运行时分为 Docker 引擎
 (Docker 引擎)完成。docker build 命令得知这个路径后,会将路径下的所有内容打包,然后上
 传给 Docker 引擎。
 
-docker build还支持从git/压缩包构建
+docker build 还支持从 git/压缩包构建

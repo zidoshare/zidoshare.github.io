@@ -1,6 +1,6 @@
 ---
 title: jvm学习记录（1）-运行时数据区域
-tags: 
+tags:
   - java
   - jvm
   - runtime

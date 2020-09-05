@@ -1,6 +1,6 @@
 ---
 title: react-starter脚手架搭建过程
-tags: 
+tags:
   - react
   - react-starter
   - front
