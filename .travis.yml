@@ -22,8 +22,8 @@ after_script:
   - git config user.name "${U_NAME}"
   - git config user.email "${U_EMAIL}"
   - git add .
-  - git commit -m "Update tools"
-  - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" build:${P_BRANCH}
+  - git commit -m "Update blogs"
+  - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" dev:${P_BRANCH}
 branches:
   only:
-    - build
+    - dev

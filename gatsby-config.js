@@ -91,7 +91,7 @@ module.exports = {
                 display: 'inline',
                 margin: '0',
                 position: 'relative',
-                width: '25px',
+                width: '20px',
               },
             },
           },

@@ -13,6 +13,7 @@ export const pageQuery = graphql`
           client_id
           client_secret
         }
+        crossServer
       }
     }
     post: markdownRemark(fields: { slug: { eq: $slug } }) {
