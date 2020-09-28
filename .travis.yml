@@ -10,6 +10,7 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
+      - expect
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX=g++-4.8; fi
   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- -- version 0.23.2
