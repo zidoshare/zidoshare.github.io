@@ -56,7 +56,7 @@ jdk源码方面： 开始接触一部分的jdk源码实现，跨度挺大，没�
 
 也确实挺少时间做题来着，不过做不出来也是真的（哭
 
-> 感觉在这些网站上做题和以前在学校做acm题不一样，命名acm有套路来着。。。
+> 感觉在这些网站上做题和以前在学校做acm题不一样，明明acm有套路来着。。。
 
 当前状态：codewars(16)
 
@@ -103,7 +103,7 @@ jdk源码方面： 开始接触一部分的jdk源码实现，跨度挺大，没�
 
 为了尝试做 markdown 编辑器看的代码：
 
-- remarked: markdown 解析器，代码结构易懂，正则挺复杂的。
+- marked.js: markdown 解析器，代码结构易懂，正则挺复杂的。
 - Remarkable: 又一款 markdown 解析器，比 remarked 要大，但是代码结构更清楚易懂。
 
 另外是还有其他的框架，主要是偶尔学习的时候，想了解某部分原理，看大框架太累而找的一些小框架看：
@@ -117,7 +117,7 @@ jdk源码方面： 开始接触一部分的jdk源码实现，跨度挺大，没�
 上半年，迷迷糊糊，有时看会书，有时又会沉迷游戏，可能确实是现在的公司空闲时间挺多，人懒下来了。
 上半年在 github 上开了许多的坑，基本都是前端项目：
 
-[react 的多页脚手架](github.com/zidoshare/react-multiple-pages-starter)（可以用，但是没必要）。
+[react 的多页脚手架](https://github.com/zidoshare/react-multiple-pages-starter)（可以用，但是没必要）。
 
 [react 服务端渲染脚手架](https://github.com/zidoshare/react-ssr-starter)(可以用，但依然没必要)
 
