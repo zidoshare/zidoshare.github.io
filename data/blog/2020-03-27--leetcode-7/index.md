@@ -1,5 +1,5 @@
 ---
-title: leetcode顺序刷题记录-4-整数反转
+title: leetcode顺序刷题记录-7-整数反转
 tags:
   - leetcode
   - 算法

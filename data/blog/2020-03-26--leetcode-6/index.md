@@ -1,5 +1,5 @@
 ---
-title: leetcode顺序刷题记录-4-Z字形变换
+title: leetcode顺序刷题记录-6-Z字形变换
 tags:
   - leetcode
   - 算法
