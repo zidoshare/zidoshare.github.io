@@ -5,6 +5,7 @@ os:
 - linux
 sudo: false
 addons:
+  ssh_known_hosts: {TARGET_IP}
   apt:
     sources:
     - ubuntu-toolchain-r-test
