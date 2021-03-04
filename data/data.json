@@ -3,15 +3,19 @@
     "name": "zido",
     "avatar": "./avatar.jpg"
   },
-  "speech": ["hello～", "I'm zido,a full stack developer", "welcome to visit my blog!"],
+  "speech": [
+    "hello～",
+    "I'm zido,a full stack developer",
+    "welcome to visit my blog!"
+  ],
   "gitment": {
     "owner": "zidoshare",
+    "admin": "zidoshare",
     "repo": "zidoshare.github.io",
-    "oauth": {
-      "client_id": "5bf00c89b0203d30e9e6",
-      "client_secret": "adf610bb87436852c6c1597aabb62b1b0ce4acce"
-    },
-    "crossServer":""
+    "client_id": "5bf00c89b0203d30e9e6",
+    "client_secret": "adf610bb87436852c6c1597aabb62b1b0ce4acce",
+    "createIssueManually": false,
+    "proxy":""
   },
   "menu": [
     {
@@ -20,7 +24,7 @@
     },
     {
       "path": "http://github.com/zidoshare",
-      "name": "github"
+      "name": "GitHub"
     }
   ]
 }
