@@ -1,7 +1,7 @@
 ---
 title: Mysql事务及其原理
-createdDate: "2021-03-05"
-updatedDate: "2021-03-05"
+createdDate: "2021-08-21"
+updatedDate: "2021-08-21"
 tags:
   - mysql
 origin: true
