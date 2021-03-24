@@ -24,7 +24,7 @@ before_install:
 script:
   - yarn build
 after_script:
-  - rsync -az --delete public/ root@www.zido.site:/data/blog/public
+  - if [ -f "public/index.html" ]; then; rsync -az --delete public/ root@www.zido.site:/data/blog/public; fi
 branches:
   only:
     - dev

@@ -1,3 +1,13 @@
+---
+title: Mysql事务及其原理
+createdDate: "2020-08-21"
+updatedDate: "2020-08-21"
+tags:
+  - mysql
+origin: true
+draft: false
+---
+
 ### 什么是事务
 
 说到事务，首先想到 ACID（Atomicity、Consistency、Isolation、Durability，即原子性、一致性、隔离性、持久性）
