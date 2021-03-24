@@ -23,8 +23,7 @@ before_install:
   - export PATH="$HOME/.yarn/bin:$PATH"
 script:
   - yarn build
-after_script:
-  - if [ -f "public/index.html" ]; then; rsync -az --delete public/ root@www.zido.site:/data/blog/public; fi
+  - rsync -az --delete public/ root@www.zido.site:/data/blog/public
 branches:
   only:
     - dev
