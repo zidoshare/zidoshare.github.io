@@ -11,7 +11,7 @@ draft: false
 
 MySQL 的学习应该先看全貌，了解 MySQL 的基础架构：
 
-![逻辑架构图](./%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84%E5%9B%BE.png)
+![逻辑架构图](./逻辑架构图.png)
 
 MySQL 架构大体上分为 Server 层和存储引擎层两部分。
 
