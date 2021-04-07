@@ -60,6 +60,6 @@ tcp_wmem: 发送缓存区的最小值，默认也是4K
 
 # 一些命令记录
 
-*`ss -n | grep ESTAB | wc -l`：查看活动连接数量
-*`cat /proc/meminfo` 查看内存
-*`slabtop`: 查看到densty、flip、sock_inode_cache、TCP四个内核对象
+* `ss -n | grep ESTAB | wc -l`：查看活动连接数量
+* `cat /proc/meminfo` 查看内存
+* `slabtop`: 查看到densty、flip、sock_inode_cache、TCP四个内核对象
