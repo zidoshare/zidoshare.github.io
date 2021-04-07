@@ -1,7 +1,7 @@
 ---
 title: MySQL-InnoDB索引详解
-createdDate: "2021-10-05"
-updatedDate: "2021-10-05"
+createdDate: "2020-10-05"
+updatedDate: "2020-10-05"
 tags:
   - mysql
 origin: true
