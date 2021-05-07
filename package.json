@@ -73,7 +73,7 @@
     "graphql-code-generator": "^0.5.2",
     "ityped": "^1.0.3",
     "jest": "^23.6.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "mdast-util-to-string": "^1.0.5",
     "node-sass": "^4.11.0",
     "plop": "^2.2.0",
