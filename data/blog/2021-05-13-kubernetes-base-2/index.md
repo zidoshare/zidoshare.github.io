@@ -1,5 +1,5 @@
 ---
-title: kubernetes基础概念笔记
+title: kubernetes学习笔记（2）-组件
 createdDate: "2021-05-13"
 updatedDate: "2021-05-13"
 tags:
@@ -61,13 +61,4 @@ Kubernetes的主要功能`：
 * Web界面(仪表盘)： Dashboard时Kubernetes集群的通用的、基于Web的用户界面。
 * 容器资源监控：将一些常见的事件序列度量值保存到一个集中的数据库中，并提供用于浏览这些数据的界面。
 * 集群层面日志：负责将鸥鸟过期的日志数据保存到一个集中的日志存储中，该存储能够提供搜索和浏览接口。
-
-### 节点
-
-Kubernetes集群由一组**节点**组成，节点是Kubernetes中**最小的计算硬件单元**。
-
-### Pod
-
-Kubernetets不直接运行容器，它将一个或多个容器封装到Pod中。相同的Pod中的任何容器共享相同的名称空间和本地网络（用于通信等）。Pod是Kubernetes应用的最小单元，Kubernetes进行缩放时就会将Pod的新副本部署到集群中。
-
 

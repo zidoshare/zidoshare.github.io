@@ -1,5 +1,5 @@
 ---
-title: kubernetes基础使用笔记
+title: kubernetes学习笔记（1）-学习环境使用
 createdDate: "2021-05-12"
 updatedDate: "2021-05-12"
 tags:
