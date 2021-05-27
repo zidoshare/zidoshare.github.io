@@ -136,3 +136,4 @@ systemctl enable kubelet --now
 kubeadm init
 ```
 
+> 这里在安装1.21的时候遇到很蛋疼的问题，需要的`coredns`镜像tag是`v1.18`，但是阿里云中的`coredns`镜像的tag是`1.18`，少了个v，导致找不到镜像安装失败。如果使用docker作为运行时，可以使用`docker tag`重新打个标签，但是crio不支持。留待以后熟悉之后再说。
