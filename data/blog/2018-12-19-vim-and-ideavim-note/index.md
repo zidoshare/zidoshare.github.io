@@ -100,7 +100,7 @@ a< - 一组< >包含的文本，包括< >号本身
 
 # vim 配置
 
-```vimrc
+```
 execute pathogen#infect() call vundle#begin() call vundle#end() syntax on
 execute pathogen#infect()
 call vundle#begin()
@@ -158,7 +158,7 @@ call NERDTreeHighlightFile('php', 'Magenta', 'none', '#ff00ff', '#151515')
 
 # ideavim 配置：
 
-```ideavimrc
+```
 let mapleader=";"
 noremap <leader>k gt
 noremap <leader>j gT

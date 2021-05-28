@@ -69,13 +69,10 @@ systemctl enable crio --now
 * 编辑`/etc/containers/registries.conf`
 ```toml
 unqualified-search-registries = ['registry.access.redhat.com', 'docker.io', 'registry.fedoraproject.org', 'quay.io', 'registry.centos.org']
-
 [[registry]]
 prefix = "k8s.gcr.io"
 insecure = false
 blocked = false
-location = "registry.aliyuncs.com/google_containers"
-
 [[registry.mirror]]
 location = "docker.mirrors.ustc.edu.cn"
 ```
