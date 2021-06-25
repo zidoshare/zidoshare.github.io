@@ -9,7 +9,7 @@ draft: false
 ---
 # 背景
 
-搭建 k8s 集群时，无法通过因业务限制，需要使用内网 ip。因此 kubeconfig 中的 cluster server 为内网地址。
+搭建 k8s 集群时，因业务限制，需要使用内网 ip。因此 kubeconfig 中的 cluster server 为内网地址。
 
 此时本地的 kubectl 无法通过指定的 kubeconfig 去连接远程 k8s 服务。
 
