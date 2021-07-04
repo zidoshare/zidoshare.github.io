@@ -1,7 +1,7 @@
 ---
 title: kubernetes学习笔记（6）- 使用 kind 快速搭建集群
-createdDate: "2021-07-04"
-updatedDate: "2021-07-04"
+createdDate: "2021-07-03"
+updatedDate: "2021-07-03"
 tags:
   - kubernetes
 origin: true
