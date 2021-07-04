@@ -189,7 +189,8 @@ $ kubectl get pods -n demo
 NAME                                 READY   STATUS    RESTARTS   AGE
 b-serv-deployment-78556ddcc6-cszff   1/1     Running   0          62m
 b-serv-deployment-78556ddcc6-qk9zz   1/1     Running   0          63m
-b-serv-deployment-78556ddcc6-z7692   1/1     Running   0          62m```
+b-serv-deployment-78556ddcc6-z7692   1/1     Running   0          62m
+```
 
 通过 NodePort 暴露了服务，我们直接使用 node 的 ip即可验证。
 
