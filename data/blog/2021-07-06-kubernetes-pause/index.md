@@ -1,5 +1,5 @@
 ---
-title: Pod 容器共享网络原理
+title: pause 容器
 createdDate: "2021-07-06"
 updatedDate: "2021-07-06"
 tags:
