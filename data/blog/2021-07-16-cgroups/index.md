@@ -1,7 +1,7 @@
 ---
 title: cgroups v1简介
 createdDate: "2021-07-16"
-updatedDate: "2021-07-16"
+updatedDate: "2021-07-26"
 tags:
   - kubernetes
 origin: true
@@ -9,7 +9,14 @@ draft: false
 ---
 
 # cgroup 概念
-Cgroup，全称Control Group（控制组），是Linux系统内核提供的一个特性（Linux 2.6.24内核开始将Cgroup加入主线），主要用于限制和隔离一组进程对系统资源的使用，也就是做资源QoS。可控制的资源主要包括CPU、内存、block I/O、网络带宽等等。
+Cgroup，全称Control Group（控制组），是Linux系统内核提供的一个特性（Linux 2.6.24内核开始将Cgroup加入主线）。
+
+主要作用：
+
+* 限制和隔离一组进程对系统资源的使用，也就是做资源QoS。可控制的资源主要包括CPU、内存、block I/O、网络带宽等等。
+* 资源统计，可以统计资源使用量，比如CPU使用时长、内存使用量。
+* 对进程组执行挂起、恢复。
+
 cgroup是虽然是内核提供的功能，但是我们事实上可以不通过内核就能够轻松操作。
 
 linux使用虚拟文件系统来为用户提供相关的接口。这也符合linux内`一切皆文件`的宗旨。
@@ -32,10 +39,9 @@ umount /sys/fs/cgroup/pids
 blkio  cpu  cpu,cpuacct  cpuacct  cpuset  devices  freezer  hugetlb  memory  net_cls  net_cls,net_prio  net_prio  perf_event  pids  systemd
 ```
 
+## subsystem(子系统)
 
-# cgroup 种类
-
-cgroup 按照资源包含很多的控制器。
+cgroup 按照资源包含很多的子系统。
 
 1. cpu 子系统，主要限制进程的 cpu 使用率。
 2. cpuacct 子系统，可以统计 cgroups 中的进程的 cpu 使用报告。
@@ -50,6 +56,18 @@ cgroup 按照资源包含很多的控制器。
 11. hugetlb 子系统，巨页（大内存页）限制。
 12. pids 子系统，进程数量限制。
 13. rdma 子系统，限制 RDMA/IB 特殊资源使用。
+
+> 不过并不一定你的 linux 就有这些子系统，它们是在不同版本的内核中加入的。
+
+## cgroup(组)
+
+除了**子系统**之外，还需要了解 group 的概念，在 cgroups 中，资源都是以组为单位控制的，每个组包含一个或多个的子系统。你可以按照任何自定义的标准进行组的划分。划分组之后，你可以将任意的进程加入、迁移到任意组中并且实时生效（但是对于进程的子进程不影响）。
+
+## hierarchy(层级树)
+
+一组以树状结构排列的cgroup就是hierarchy(层级树)，结合虚拟文件系统来理解，通过创建、删除、重命名子目录来定义层次结构。子目录能够继承父目录的全部资源（当然了，不能超过），也可以基于父目录的资源限制进行进一步的资源大小限制。父目录如果调整了资源大小，子目录同样会马上受到影响。
+
+每个层级树可以关联任意个数的subsystem，但是每个subsystem最多只能被挂在一颗树上。
 
 # cgroup 简单操作
 
