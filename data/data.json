@@ -23,12 +23,12 @@
       "name": "关于我"
     },
     {
-      "path": "http://github.com/zidoshare",
-      "name": "GitHub"
-    },
-    {
       "path": "/friends",
       "name": "友链"
+    },
+    {
+      "path": "http://github.com/zidoshare",
+      "name": "GitHub"
     }
   ]
 }
