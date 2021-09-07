@@ -25,6 +25,10 @@
     {
       "path": "http://github.com/zidoshare",
       "name": "GitHub"
+    },
+    {
+      "path": "/friends",
+      "name": "友链"
     }
   ]
 }
