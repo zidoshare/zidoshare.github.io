@@ -43,5 +43,4 @@ jobs:
           remote_path: /data/blog/public
           remote_host: www.zido.site
           remote_user: root
-          known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
           remote_key: ${{ secrets.deploy }}
