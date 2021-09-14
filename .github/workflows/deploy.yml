@@ -32,9 +32,7 @@ jobs:
           cache: yarn
       # Runs a single command using the runners shell
       - name: install modules
-        uses: borales/actions-yarn@v2.3.0
-        with:
-          cmd: install --frozen-lockfile
+        run: yarn install --frozen-lockfile
       - name: build website
         run: yarn build
       - name: rsync deployments
