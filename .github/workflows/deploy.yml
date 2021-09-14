@@ -36,9 +36,7 @@ jobs:
         with:
           cmd: install --frozen-lockfile
       - name: build website
-        uses: borales/actions-yarn@v2.3.0
-        with:
-          cmd: build
+        run: yarn build
       - name: rsync deployments
         uses: burnett01/rsync-deployments@5.1
         with:
