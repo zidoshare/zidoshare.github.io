@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: "14.17.5"
           # Used to specify a package manager for caching in the default directory. Supported values: npm, yarn, pnpm
-          cache: yarn # optional
+          cache: yarn
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       # Runs a single command using the runners shell
