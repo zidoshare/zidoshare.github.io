@@ -1,9 +1,10 @@
 ---
 title: snowflake 算法详解及应用
-createdDate: "2021-09-06"
-updatedDate: "2021-09-06"
+createdDate: "2021-09-22"
+updatedDate: "2021-09-22"
 tags:
   - go
+  - snowflake
 origin: true
 draft: false
 ---
