@@ -1,4 +1,5 @@
 # zido 的个人博客
+[![Deploy](https://github.com/zidoshare/zidoshare.github.io/actions/workflows/deploy.yml/badge.svg?branch=dev)](https://github.com/zidoshare/zidoshare.github.io/actions/workflows/deploy.yml)
 
 欢迎访问
 
