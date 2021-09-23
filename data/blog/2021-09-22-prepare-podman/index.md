@@ -81,7 +81,7 @@ insecure = false
 blocked = false
 location = "docker.io"
 [[registry.mirror]]
-location = "hub-mirror.c.163.com"
+location = "f1361db2.m.daocloud.io"
 [[registry.mirror]]
 location = "registry.docker-cn.com"
 ```
@@ -89,7 +89,7 @@ location = "registry.docker-cn.com"
 这会依次使用以下 url 去查找下载镜像。
 
 * registry.docker-cn.com
-* hub-mirror.c.163.com
+* f1361db2.m.daocloud.io
 * docker.io
 
 # 总结
