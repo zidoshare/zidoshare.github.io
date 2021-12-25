@@ -8,7 +8,7 @@ tags:
   - fuse
   - containers
 origin: true
-draft: true
+draft: false
 ---
 
 # 用户态文件系统介绍
