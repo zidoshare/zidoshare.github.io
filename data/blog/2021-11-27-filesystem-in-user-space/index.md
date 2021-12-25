@@ -1,7 +1,7 @@
 2021-11-27-filesystem-in-user-space
 
 ---
-title: 详解用户态文件系统
+title: 用户态文件系统笔记
 createdDate: "2021-11-27"
 updatedDate: "2021-11-27"
 tags:
@@ -42,7 +42,7 @@ $ ls -l /dev/fuse
 crw-rw-rw- root root 0 B Thu Nov 18 22:24:32 2021 /dev/fuse
 ```
 
-这即是我们与 FUSE 内核模块交流的纽带。在我们的用户空间代码中，应该首先使用文件描述符调用 open 函数，接着从此文件中读取请求并且写入响应来完成一次 IO 调用。不过需要注意的是，这个设备每次打开都会有一个不同的 session,第二次调用 open 的时候并不能访问到第一次调用 open 的资源。
+这即是我们与 FUSE 内核模块交流的纽带。在我们的用户空间代码中，通过调用 open 函数获得文件描述符，凭此来读取请求并且写入响应来完成一次 IO 调用。不过需要注意的是，这个设备每次打开都会有一个不同的 session,第二次调用 open 的时候并不能访问到第一次调用 open 的资源。
 
 ## fuse 协议
 
@@ -105,4 +105,18 @@ struct fuse_out_header {
 };
 ```
 
-它包含一个错误码和一个跟请求保持一致的唯一 id，用于标识是哪个请求的响应。
+它包含一个错误码和一个跟请求保持一致的唯一 id，用于标识是哪个请求的响应。接着在之后紧跟着响应体（如果有）。如果错误码不为 0，则不应该包含响应体。具体怎么写其实和req 的读取类似，就不再赘述了。
+
+# 用户态文件系统库生态
+
+上面讲述的也只是基本协议，其实用户态文件系统还需要涉及到很多方方面面，因此选择一个好的实现就很重要了，目前 fuse 的生态基本各语言都有封装。
+
+首选的当然是用户态 FUSE 协议的参考实现 libfuse 了，它通过封装对外提供了两类 API 以帮助我们快速开发，分别是:
+* [fuse_lowlevel.h](https://github.com/libfuse/libfuse/blob/master/include/fuse_lowlevel.h) ，它是内核调用的浅封装转发，可控性更高，性能更好，但是需要对源码以及文件系统机制有一定了解。
+* [fuse.h](https://github.com/libfuse/libfuse/blob/master/include/fuse.h)，它是 lowlevel api 的再封装，基本屏蔽了大部分复杂性，只需要实现一部分 api 即可实现一个用户态文件系统，但是性能表现一般。大部分应用都不会选择使用 high level api 进行开发，毕竟用户态文件系统性能非常关键。
+
+其次就是 go 语言的 [go-fuse](https://github.com/hanwen/go-fuse) ，以及 rust 语言的 [fuse-rs](https://github.com/zargony/fuse-rs)，不过已经有一段时间没更新了，更推荐 [fuser](https://github.com/cberner/fuser) 这个库，它是 fuse-rs 的一个 fork ，目前在持续更新中。
+
+# 总结
+
+FUSE 是云原生与容器化的一个重要模块，就如开头说的，它几乎是实现 rootless 文件系统的唯一选择，由此发展了 fuse-overlayfs 。而对于我们普通开发者而言，我们也可以通过用户态文件系统来扩展自己想要的功能。
