@@ -1,5 +1,3 @@
-2021-11-27-filesystem-in-user-space
-
 ---
 title: 用户态文件系统笔记
 createdDate: "2021-11-27"
