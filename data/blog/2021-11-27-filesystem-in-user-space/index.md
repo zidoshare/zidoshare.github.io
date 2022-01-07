@@ -1,5 +1,5 @@
 ---
-title: 用户态文件系统笔记
+title: 用户态文件系统详解
 createdDate: "2021-11-27"
 updatedDate: "2021-11-27"
 tags:
@@ -44,7 +44,7 @@ crw-rw-rw- root root 0 B Thu Nov 18 22:24:32 2021 /dev/fuse
 
 ## fuse 协议
 
-既然是客户端-服务器协议，那么与 http 协议一样，每一个从内核到用户空间的请求也都有一个请求头 fuse_in_header，它的大小是固定的，定义如下：
+既然是客户端-服务器协议，那么与 http 协议一样，每一个从内核到用户空间的请求也都有一个请求头 `fuse_in_header`，它的大小是固定的，定义如下：
 ```c
 struct fuse_in_header {
 	uint32_t	len; /* 数据长度：包括 header 在内 */
@@ -60,7 +60,7 @@ struct fuse_in_header {
 
 这在 [内核的 fuse.h](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/linux/fuse.h) 头文件和 [libfuse 下的 fuse_kernel.h](https://github.com/libfuse/libfuse/blob/master/include/fuse_kernel.h)中都有定义。
 
-接着在请求头之后，则紧跟着请求体，请求体的长度是可变的，它的具体类型可以通过 opcode 来进行判断，它表示了操作的类型，主要就凭借它来识别内核到底想要干嘛，你应该回复什么消息，所有的 opcode 在 libfuse 中均有 [定义](https://github.com/libfuse/libfuse/blob/fuse-3.10.5/include/fuse_kernel.h#L379-L428)。
+接着在请求头之后，则紧跟着请求体，请求体的长度是可变的，它的具体类型可以通过 `opcode` 来进行判断，它表示了操作的类型，主要就凭借它来识别内核到底想要干嘛，你应该回复什么消息，所有的 opcode 在 libfuse 中均有 [定义](https://github.com/libfuse/libfuse/blob/fuse-3.10.5/include/fuse_kernel.h#L379-L428)。
 
 例如，如果 opcode 为 15 (FUSE_READ)，则后面紧跟着 `fuse_read_in` 结构体。不过为了更详细的讲解，我们拿一个更全面的 rename 操作来说明。rename 的 buf 结构长这样 `{fuse_in_header}{fuse_rename_in}{oldname}{newname}`。它的解析过程略有意思:
 
