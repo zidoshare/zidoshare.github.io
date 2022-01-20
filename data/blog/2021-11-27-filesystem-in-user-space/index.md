@@ -163,6 +163,103 @@ struct fuse_out_header {
 
 它包含一个错误码和一个跟请求保持一致的唯一 id，用于标识是哪个请求的响应。接着在之后紧跟着响应体（如果有）。如果错误码不为 0，则不应该包含响应体。具体怎么写其实和req 的读取类似，就不再赘述了。
 
+## libfuse 性能优化
+
+FUSE 相对于内核态的文件系统，效率损耗大概在 10% - 20%。但是如果相关代码写得不好，那么性能的损耗可能会非常大。因此如何编写一个好的 FUSE 代码非常重要。这里将从几个最关键的点出发。
+
+### 1. 使用 low_level_api 
+
+high_level_api 虽然对于用户来说编写代码非常的方便，但是它的性能损耗是非常大的。
+
+我们以官方示例为例，`example/passthrough_fh.c` 是使用 `high_level_api` 实现的直接文件夹代理，`example.passthrough_hp.cc` 是使用 `low_level_api` 实现的直接文件夹代理。同时，为了模拟常用情况，我们以 nodejs 安装 `node_modules` 为例，请注意，为了去除网络影响，我已经提前使用 `npm install` 在其他文件夹下安装过，这样会利用本地 cache。他们最终安装耗时如下：
+
+* 内核文件系统： 1m9s
+* `low_level_api`：1m20s
+* `high_level_api`：2m9s
+
+可以看到使用 `low_level_api` 在小文件大量写入的情况下表现与内核态的文件系统已经极为接近了，而使用 `high_level_api` 实现的性能损耗几乎达到 50% 之多。
+
+### 2. 充分缓存
+
+如果你认为 `low_level_api` 确实比较难，还是可以利用一些参数来让 `high_level_api` 具有更高性能的。这方面我们需要针对业务场景来做，首先需要了解可以利用的缓存参数：
+
+* `-o kernel_cache`：开启内核文件缓存。
+* `-o entry_timeout=T`：文件名缓存时长。
+* `-o attr_timeout=T`：属性缓存时长。
+* `-o negative_timeout=T`：被删除的文件名缓存时长。
+* `-o noforget`: 缓存不失效（这里要注意内存用量）。
+
+其中对于性能影响最大的是前三个，可以根据需要选择是否开启。
+
+而如果使用 `low_level_api` 这些参数的用户就不大了，我们应该在代码中根据情况建立合适的缓存，并内核有一套对应的引用计数的机制，我们建立得缓存可以与之对应。比较合适的时机是：
+* `lookup`：当要操作某个文件时会先调用 lookup 。内核中的文件引用 +1，用户态建立该文件缓存。
+* `readdirplus`: 读取文件夹时调用，内核中的文件引用 +1，用户态建立该文件夹所有文件的缓存。
+* `create`：创建并打开文件，内核文件引用 +1，用户态建议该文件缓存。
+* `mkdir`：创建文件夹，内核文件引用 +1，用户态建议该文件夹缓存。
+* `mknod`: 创建文件，内核文件引用 +1，用户态建议该文件缓存。
+* `symlink`: 建立链接，内核文件引用 +1，用户态建议该文件缓存。
+* `forget`： 当文件/文件夹关闭时调用，清除文件/文件夹缓存，从而控制内存用量。
+* `forgetmulti`： 当多个文件/文件夹关闭时调用，清除多个文件/文件夹的缓存，从而控制内存用量。
+
+你可以在 `example/passthrough_hp.cc` 中看到相关代码：
+
+```c++
+static void sfs_lookup(fuse_req_t req, fuse_ino_t parent, const char *name) {
+    fuse_entry_param e {};
+    auto err = do_lookup(parent, name, &e);
+    if (err == ENOENT) {
+        e.attr_timeout = fs.timeout;
+        e.entry_timeout = fs.timeout;
+        e.ino = e.attr.st_ino = 0;
+        fuse_reply_entry(req, &e);
+    } else if (err) {
+        if (err == ENFILE || err == EMFILE)
+            cerr << "ERROR: Reached maximum number of file descriptors." << endl;
+        fuse_reply_err(req, err);
+    } else {
+        fuse_reply_entry(req, &e);
+    }
+}
+
+static void sfs_forget(fuse_req_t req, fuse_ino_t ino, uint64_t nlookup) {
+    forget_one(ino, nlookup);
+    fuse_reply_none(req);
+}
+
+```
+
+这里仅例举两个函数，其它函数基本类似，就不多赘述。
+
+### 3. 使用零拷贝写入
+
+实现 `write_buf` 而不是 `write` 将得到极大的性能提升。它接收一个 `in_buf` ，然后通过调用 `FUSE_BUFVEC_INIT` 宏生成一个 outbuf 并使用 `fuse_buf_copy` 方法调用写入。这个过程将基本不会产生任何性能的损耗。示例如下：
+
+```c++
+
+static void do_write_buf(fuse_req_t req, size_t size, off_t off,
+                         fuse_bufvec *in_buf, fuse_file_info *fi) {
+    fuse_bufvec out_buf = FUSE_BUFVEC_INIT(size);
+    out_buf.buf[0].flags = static_cast<fuse_buf_flags>(
+        FUSE_BUF_IS_FD | FUSE_BUF_FD_SEEK);
+    out_buf.buf[0].fd = fi->fh;
+    out_buf.buf[0].pos = off;
+
+    auto res = fuse_buf_copy(&out_buf, in_buf, FUSE_BUF_COPY_FLAGS);
+    if (res < 0)
+        fuse_reply_err(req, -res);
+    else
+        fuse_reply_write(req, (size_t)res);
+}
+
+
+static void sfs_write_buf(fuse_req_t req, fuse_ino_t ino, fuse_bufvec *in_buf,
+                          off_t off, fuse_file_info *fi) {
+    (void) ino;
+    auto size {fuse_buf_size(in_buf)};
+    do_write_buf(req, size, off, in_buf, fi);
+}
+```
+
 ## 最后
 
 即使你不是使用 C 语言，仍然可以参考 libfuse 自行实现，不过 `GitHub` 中已经有很多开源开发者做了，他们或是自行实现或是封装 libfuse。我这里列举自己比较关心的 `Go` 和 `Rust` 语言的相关库：
