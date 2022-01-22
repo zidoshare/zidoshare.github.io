@@ -34,13 +34,8 @@ export const pageQuery = graphql`
         origin
         updatedDate(formatString: "YYYY年MM月DD日")
         image {
-          children {
-            ... on ImageSharp {
-              fixed(width: 720, quality: 100) {
-                src
-                srcSet
-              }
-            }
+          childrenImageSharp {
+            gatsbyImageData(width: 720, height: 100)
           }
         }
       }
@@ -63,13 +58,8 @@ export const pageQuery = graphql`
           frontmatter {
             title
             image {
-              children {
-                ... on ImageSharp {
-                  fixed(width: 300, height: 100) {
-                    src
-                    srcSet
-                  }
-                }
+              childrenImageSharp {
+                gatsbyImageData(width: 300, height: 100)
               }
             }
           }

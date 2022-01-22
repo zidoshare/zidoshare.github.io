@@ -26,7 +26,7 @@ export default (props: BlogPostProps) => {
       headerType={HeaderType.POST_HEADER}
       data={{
         ...post.frontmatter,
-        image: props.pageContext.header.children[0] as ImageSharp,
+        image: props.pageContext.header.childrenImageSharp[0].gatsbyImageData,
       }}
     >
       <BlogPost slug={slug} commentOptions={gitmentOptions} post={post} />

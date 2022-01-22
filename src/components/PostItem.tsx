@@ -3,6 +3,7 @@ import { Link, StaticQuery, graphql } from 'gatsby'
 import { ImageSharpFixed, Query, ImageSharp } from '../graphql-types'
 import * as classes from './PostItem.module.scss'
 import TagsCard, { TagsCardProps } from './TagsCard'
+import {GatsbyImage} from 'gatsby-plugin-image'
 export interface PostItemProps extends TagsCardProps {
   cover: ImageSharpFixed
   title: string
@@ -24,7 +25,7 @@ export default (props: PostItemProps) => {
       <div className={classes.itemMain}>
         <div className={classes.cover}>
           <Link to={href}>
-            <img {...cover} />
+            <GatsbyImage image={cover} alt="xxx" />
           </Link>
         </div>
         <div className={classes.itemElse}>

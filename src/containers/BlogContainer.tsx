@@ -38,7 +38,11 @@ const BlogPage = (props: IndexProps) => {
             excerpt,
             wordCount,
           } = node
-          const cover = props.pageContext.headers[slug].children[0].fixed
+
+          if(props.pageContext.headers[slug].childrenImageSharp.length == 0) {
+            console.log(slug)
+          }
+          const cover = props.pageContext.headers[slug].childrenImageSharp[0].gatsbyImageData
           const tags = node.frontmatter.tags
           return (
             <PostItem

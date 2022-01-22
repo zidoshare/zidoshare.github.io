@@ -106,15 +106,10 @@ module.exports = {
         ],
       },
     },
+    `gatsby-plugin-image`,
+    `gatsby-plugin-sharp`,
     // Parse all images files
     `gatsby-transformer-sharp`,
-    {
-      resolve: `gatsby-plugin-sharp`,
-      options: {
-        useMozJpeg: false,
-        stripMetadata: true,
-      },
-    },
     // Parse JSON files
     `gatsby-transformer-json`,
     // Add typescript stack into webpack

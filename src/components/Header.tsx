@@ -9,6 +9,7 @@ import Menu, { MenuItem } from './Menu'
 import OutLink from './base/OutLink'
 import { connect } from 'react-redux'
 import { StoreState } from '../state'
+import {GatsbyImage} from 'gatsby-plugin-image'
 
 export const menuItems = [
   { name: '首页', path: '/', Link },
@@ -63,17 +64,17 @@ export class Header extends React.Component<HeaderProps, HeadState> {
     const props = this.props
     const { children } = props
     let style
-    if (props.background == null) {
-      style = {}
-    } else if (typeof props.background === 'string') {
-      style = {
-        backgroundImage: `url(${props.background})`,
-      }
-    } else {
-      style = {
-        backgroundImage: `url(${props.background.fixed.src})`,
-      }
-    }
+    // if (props.background == null) {
+    //   style = {}
+    // } else if (typeof props.background === 'string') {
+    //   style = {
+    //     backgroundImage: `url(${props.background})`,
+    //   }
+    // } else {
+    //   style = {
+    //     backgroundImage: `url(${props.background.fixed.src})`,
+    //   }
+    // }
     return (
       <header
         className={classes.header}
@@ -130,7 +131,8 @@ export class Header extends React.Component<HeaderProps, HeadState> {
             width={this.state.starWidth}
             rejectClient={this.state.rejectClient}
           />
-          <div className={classes.headerBgContainer} style={style} />
+        
+          {/* <div className={classes.headerBgContainer} style={style} /> */}
           <div id="main-header" />
           {children}
         </div>

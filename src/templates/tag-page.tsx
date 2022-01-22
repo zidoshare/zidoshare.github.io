@@ -48,13 +48,8 @@ export const pageQuery = graphql`
             tags
             origin
             image {
-              children {
-                ... on ImageSharp {
-                  fixed(width: 680, height: 440) {
-                    src
-                    srcSet
-                  }
-                }
+              childrenImageSharp {
+                gatsbyImageData(width: 680, height: 440)
               }
             }
           }

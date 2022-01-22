@@ -72,30 +72,21 @@ exports.createPages = ({ graphql, actions }) => {
                   createdDate(formatString: "YYYY-MM-DD")
                   draft
                   image {
-                    children {
-                      ... on ImageSharp {
-                        fixed(width: 680, height: 440) {
-                          src
-                          srcSet
-                        }
-                      }
+                    childImageSharp {
+                      gatsbyImageData(width: 680, height: 440)
                     }
                   }
                 }
               }
             }
           }
-          allFile(filter: { absolutePath: { regex: "/headers/" } }) {
+          allFile(filter: { absolutePath: { regex: "/data/headers/.+(jpg|jpeg|png)$/" } }) {
             totalCount
             edges {
               node {
-                children {
-                  ... on ImageSharp {
-                    fixed(width: 680, height: 440) {
-                      src
-                      srcSet
-                    }
-                  }
+                name
+                childrenImageSharp {
+                  gatsbyImageData(width: 680, height: 440)
                 }
               }
             }
@@ -113,9 +104,9 @@ exports.createPages = ({ graphql, actions }) => {
       posts.forEach(post => {
         let header = post.frontmatter.image
         if (!header) {
-          let covers = result.data.allFile.edges.map(edge => edge.node)
+          let covers = result.data.allFile.edges
           const index = Math.floor(Math.random() * covers.length)
-          header = covers[index]
+          header = covers[index].node
         }
         let context = {
           slug: post.fields.slug,
