@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { MarkdownHeading } from '../graphql-types'
 import { withDefaultProps } from '../utils/props'
 import WindowEventHandler from './base/WindowEventHandler'
 import classnames from 'classnames'
@@ -7,7 +6,7 @@ import './MarkNav.scss'
 import { throttle } from 'lodash'
 const slugs = require(`github-slugger`)
 export interface MarkNavProps {
-  headings: MarkdownHeading[]
+  headings: any[]
   ordered: boolean
   className: string
 }
@@ -17,10 +16,12 @@ interface MarkNavState {
   scrollHeadings: ScrollHeading[]
 }
 
-interface ScrollHeading extends MarkdownHeading {
+interface ScrollHeading {
   top: number
   active: boolean
   showValue: string
+  value: string
+  depth: number
 }
 
 function getElementTop(el: HTMLElement): number {

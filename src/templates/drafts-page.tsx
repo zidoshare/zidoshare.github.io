@@ -37,11 +37,6 @@ export const pageQuery = graphql`
             updatedDate(formatString: "YYYY年MM月DD日")
             tags
             origin
-            image {
-              childrenImageSharp {
-                gatsbyImageData(width: 680, height: 440)
-              }
-            }
           }
         }
       }

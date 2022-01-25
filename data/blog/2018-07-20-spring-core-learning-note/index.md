@@ -8,7 +8,6 @@ createdDate: '2018-07-20'
 updatedDate: '2018-07-20'
 draft: false
 origin: true
-image: header.png
 ---
 
 从头开始学习 spring，首先从官方文档入手，先读一读官方 spring 文档。下面是一些概要笔记。

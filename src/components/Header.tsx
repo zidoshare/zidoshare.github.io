@@ -1,11 +1,10 @@
 import * as React from 'react'
-import { ImageSharp, Query } from '../graphql-types'
 import { Link, StaticQuery, graphql } from 'gatsby'
 import * as classes from './Header.module.scss'
 import StarCanvas from './StarCanvas'
 import { HOME_TITLE } from '../contants/layout'
 import WindowEventHandler from '../components/base/WindowEventHandler'
-import Menu, { MenuItem } from './Menu'
+import Menu from './Menu'
 import OutLink from './base/OutLink'
 import { connect } from 'react-redux'
 import { StoreState } from '../state'
@@ -18,7 +17,7 @@ export const menuItems = [
 ]
 
 export interface HeaderProps extends React.HTMLProps<HTMLHeadingElement> {
-  background?: string | ImageSharp | null
+  background?: any
   children: any
   boom: 0 | 1
 }
@@ -63,7 +62,7 @@ export class Header extends React.Component<HeaderProps, HeadState> {
   render() {
     const props = this.props
     const { children } = props
-    let style
+    // let style
     // if (props.background == null) {
     //   style = {}
     // } else if (typeof props.background === 'string') {
@@ -97,7 +96,7 @@ export class Header extends React.Component<HeaderProps, HeadState> {
               }
             }
           `}
-          render={(data: Query) => {
+          render={(data: any) => {
             const extraItems = data.dataJson.menu
             const items = [
               ...menuItems,
@@ -131,7 +130,7 @@ export class Header extends React.Component<HeaderProps, HeadState> {
             width={this.state.starWidth}
             rejectClient={this.state.rejectClient}
           />
-        
+          {/* <GatsbyImage image = {props.background} alt=""/> */}
           {/* <div className={classes.headerBgContainer} style={style} /> */}
           <div id="main-header" />
           {children}

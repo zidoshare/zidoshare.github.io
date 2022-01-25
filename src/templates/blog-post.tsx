@@ -33,11 +33,6 @@ export const pageQuery = graphql`
         tags
         origin
         updatedDate(formatString: "YYYY年MM月DD日")
-        image {
-          childrenImageSharp {
-            gatsbyImageData(width: 720, height: 100)
-          }
-        }
       }
     }
     recents: allMarkdownRemark(
@@ -57,11 +52,6 @@ export const pageQuery = graphql`
           timeToRead
           frontmatter {
             title
-            image {
-              childrenImageSharp {
-                gatsbyImageData(width: 300, height: 100)
-              }
-            }
           }
         }
       }

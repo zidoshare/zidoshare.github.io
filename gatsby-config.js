@@ -61,14 +61,9 @@ module.exports = {
         icon: config.siteMetadata.icon,
       },
     },
-    // Expose `/data` to graphQL layer
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: `data`,
-        path: `${__dirname}/data`,
-      },
-    },
+    // Parse all images files
+    `gatsby-plugin-sharp`,
+    `gatsby-transformer-sharp`,
     // Parse all markdown files (each plugin add/parse some data into graphQL layer)
     {
       resolve: `gatsby-transformer-remark`,
@@ -106,10 +101,15 @@ module.exports = {
         ],
       },
     },
+    // Expose `/data` to graphQL layer
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `data`,
+        path: `${__dirname}/data`,
+      },
+    },
     `gatsby-plugin-image`,
-    `gatsby-plugin-sharp`,
-    // Parse all images files
-    `gatsby-transformer-sharp`,
     // Parse JSON files
     `gatsby-transformer-json`,
     // Add typescript stack into webpack
@@ -119,8 +119,7 @@ module.exports = {
     // html file so the site works offline and is otherwise
     // resistant to bad networks. Works with almost any
     // site!
-    // `gatsby-plugin-offline`,
-    `gatsby-plugin-remove-serviceworker`,
+    `gatsby-plugin-offline`,
     {
       resolve: `gatsby-plugin-feed`,
       options: {
@@ -152,7 +151,7 @@ module.exports = {
                 allMarkdownRemark(
                   limit: 1000,
                   sort: { order: DESC, fields: [frontmatter___updatedDate] },
-                  filter: {frontmatter: { draft: { ne: true } }}
+                  filter: {frontmatter: { draft: { ne: true } }, fileAbsolutePath: { regex: "/blog/" }}
                 ) {
                   edges {
                     node {
@@ -168,6 +167,7 @@ module.exports = {
               }
             `,
             output: '/rss.xml',
+            title: config.siteMetadata.title,
           },
         ],
       },

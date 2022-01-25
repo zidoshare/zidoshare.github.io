@@ -8,7 +8,6 @@ createdDate: '2018-08-08'
 updatedDate: '2018-08-08'
 draft: false
 origin: true
-image: header.png
 ---
 
 > 以下代码或分析来源于 jdk8

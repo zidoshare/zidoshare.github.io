@@ -204,7 +204,7 @@ FUSE 相对于内核态的文件系统，效率损耗大概在 `10% - 20%`。但
 
 你可以在 `example/passthrough_hp.cc` 中看到相关代码：
 
-```c++
+```cpp
 static void sfs_lookup(fuse_req_t req, fuse_ino_t parent, const char *name) {
     fuse_entry_param e {};
     auto err = do_lookup(parent, name, &e);
@@ -235,7 +235,7 @@ static void sfs_forget(fuse_req_t req, fuse_ino_t ino, uint64_t nlookup) {
 
 实现 `write_buf` 而不是 `write` 将得到极大的性能提升。它接收一个 `in_buf` ，然后通过调用 `FUSE_BUFVEC_INIT` 宏生成一个 outbuf 并使用 `fuse_buf_copy` 方法调用写入。这个过程将基本不会产生任何性能的损耗。示例如下：
 
-```c++
+```cpp
 
 static void do_write_buf(fuse_req_t req, size_t size, off_t off,
                          fuse_bufvec *in_buf, fuse_file_info *fi) {

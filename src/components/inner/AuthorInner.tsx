@@ -64,14 +64,14 @@ export class AuthorInner extends React.Component<AuthorInnerProps, AuthorInnerSt
           }
         `}
         render={(data: Query) => {
-          const avatar = data.dataJson.author.avatar.childrenImageSharp[0].gatsbyImageData
+          const avatar = data.dataJson.author.avatar
           const totalCount = data.allMarkdownRemark.totalCount
           const { name } = data.dataJson.author
           return (
             <div className="person-header">
               <div className="author-inner">
                 <div>
-                  <GatsbyImage alt={name} image={avatar} className="avatar" onClick={this.handleClick} />
+                  <GatsbyImage alt={name} image={avatar.childrenImageSharp[0].gatsbyImageData} className="avatar" onClick={this.handleClick} />
                 </div>
                 <div style={{ textAlign: 'left', marginLeft: 20 }}>
                   <p>{totalCount} 篇文章</p>

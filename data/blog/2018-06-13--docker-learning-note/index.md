@@ -7,7 +7,6 @@ createdDate: '2018-06-13'
 updatedDate: '2018-06-13'
 draft: false
 origin: true
-image: header.png
 ---
 
 # docker 安装
