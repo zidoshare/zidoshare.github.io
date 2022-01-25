@@ -2,7 +2,7 @@ const slash = require('slash')
 const { kebabCase, uniq, get, compact, times, findIndex } = require('lodash')
 const { readdirSync, statSync, fstat, exists, existsSync } =
   require('fs')
-const { relative, join, dirname,resolve: pathResolve } = require('path')
+const { relative, join, dirname, resolve: pathResolve } = require('path')
 
 const POSTS_PER_PAGE = 10
 const cleanArray = arr => compact(uniq(arr))
@@ -53,8 +53,8 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
       }
       let slug = '/' + filepath.join('/').replace(' ', '-') + '/'
       createNodeField({ node, name: 'slug', value: slug, })
-      if(node.frontmatter.image){
-        if (existsSync(join(dirname(node.fileAbsolutePath), node.frontmatter.image))){
+      if (node.frontmatter.image) {
+        if (existsSync(join(dirname(node.fileAbsolutePath), node.frontmatter.image))) {
           createNodeField({ node, name: 'image', value: node.frontmatter.image })
           break
         }
@@ -94,7 +94,7 @@ exports.createPages = ({ graphql, actions }) => {
     graphql(
       `
         {
-          posts: allMarkdownRemark{
+          posts: allMarkdownRemark(sort: { order: DESC, fields: [frontmatter___createdDate] }){
             edges {
               node {
                 fields {
