@@ -26,7 +26,6 @@ const BlogPage = (props: IndexProps) => {
 
     return (
       <div className={classes.indexContent}>
-        <div/>
         {data.posts.edges.map(({ node }: { node: any }) => {
           const {
             frontmatter,

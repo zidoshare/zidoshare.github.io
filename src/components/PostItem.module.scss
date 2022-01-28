@@ -8,16 +8,16 @@
     color: #333;
   }
   @media screen and (min-width: 1200px) {
-    &:nth-child(odd) {
+    &:nth-child(even) {
       text-align: left;
     }
-    &:nth-child(even) {
+    &:nth-child(odd) {
       text-align: right;
     }
-    &:nth-child(odd) .itemElse {
+    &:nth-child(even) .itemElse {
       left: 660px;
     }
-    &:nth-child(even) .itemElse {
+    &:nth-child(odd) .itemElse {
       right: 660px;
     }
     .itemElse {
@@ -43,7 +43,7 @@
       border-radius: 50%;
     }
   }
-  &:nth-child(odd) .timeLabel {
+  &:nth-child(even) .timeLabel {
     left: 50%;
     vertical-align: middle;
     text-align: left;
@@ -54,7 +54,7 @@
       margin-left: 20px;
     }
   }
-  &:nth-child(even) .timeLabel {
+  &:nth-child(odd) .timeLabel {
     right: 50%;
     vertical-align: middle;
     text-align: right;

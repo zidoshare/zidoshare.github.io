@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { debounce, throttle } from 'lodash'
+import * as classes from './StarCanvas.module.scss'
 /* tslint:disable */
 export interface StarCanvasProps extends LapOptions {}
 
@@ -275,6 +276,8 @@ export default class StarCanvas extends React.Component<StarCanvasProps> {
     this.lap.stop()
   }
   render() {
-    return <canvas ref="canvas" width={this.props.width} height={this.props.height} />
+    return <div className={classes.starbg}>
+      <canvas ref="canvas" width={this.props.width} height={this.props.height} />
+    </div>
   }
 }
