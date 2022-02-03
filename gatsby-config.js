@@ -120,8 +120,8 @@ module.exports = {
     // html file so the site works offline and is otherwise
     // resistant to bad networks. Works with almost any
     // site!
-    // `gatsby-plugin-offline`,
-    `gatsby-plugin-remove-serviceworker`,
+    `gatsby-plugin-offline`,
+    // `gatsby-plugin-remove-serviceworker`,
     {
       resolve: `gatsby-plugin-feed`,
       options: {
