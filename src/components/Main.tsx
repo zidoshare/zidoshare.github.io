@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as classes from './Main.module.scss'
 import classnames from 'classnames'
 export default (
-  props: React.HTMLProps<HTMLMainElement> & {
+  props: React.HTMLProps<HTMLMapElement> & {
     extra?: React.ReactElement<any>
   }
 ) => {

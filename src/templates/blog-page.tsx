@@ -1,13 +1,9 @@
 import * as React from 'react'
 import Blog, { IndexProps } from '../containers/BlogContainer'
 import { graphql } from 'gatsby'
-import { WithLayout } from '../containers/LayoutContainer'
-import { HeaderType } from '../contants/header'
 
 export default (props: IndexProps) => (
-  <WithLayout headerType={HeaderType.AUTHOR_HEADER}>
-    <Blog {...props} />
-  </WithLayout>
+  <Blog {...props} />
 )
 
 export const pageQuery = graphql`
@@ -33,7 +29,7 @@ export const pageQuery = graphql`
           wordCount {
             words
           }
-          excerpt
+          excerpt(format:HTML)
           timeToRead
           fields {
             slug
@@ -58,3 +54,9 @@ export const pageQuery = graphql`
     }
   }
 `
+
+// {
+//   childrenImageSharp {
+//     gatsbyImageData(width: 35, height: 35)
+//   }
+// }

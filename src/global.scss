@@ -12,6 +12,16 @@ body {
   margin: 0;
   background-color: #101012;
 }
+
+body {
+  font-family: "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+:lang(en-US) {
+  font-family: "Helvetica Neue", Roboto, "Segoe UI", SegoeUI, Helvetica, Arial, sans-serif;
+}
+
+
 @media print {
   body {
     background-color: #fff;

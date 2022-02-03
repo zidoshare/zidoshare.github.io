@@ -1,4 +1,6 @@
 @import '../themes.scss';
 .starbg {
     background: $global-background-color;
+    width: 100%;
+    overflow-x: hidden;
 }

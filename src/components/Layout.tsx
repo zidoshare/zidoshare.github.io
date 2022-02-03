@@ -1,9 +1,7 @@
 import * as React from 'react'
 import * as classes from './Layout.module.scss'
-import { StaticQuery, graphql } from 'gatsby'
 import '../global.scss'
 import Header from './Header'
-import { Helmet } from 'react-helmet'
 import { HeaderType } from '../contants/header'
 import { InnerProps } from './inner'
 import Footer from './Footer'
@@ -24,39 +22,19 @@ export default class Layout extends React.Component<Readonly<LayoutProps>> {
   }
   render() {
     return (
-      <div>
-        <div className={classes.root}>
+      <>
+        <Affix>
+          <Header />
+        </Affix>
+        <div className={classes.content}>
           {/* 页头 */}
-          <Affix>
-            <Header>
-              {/* {inner} */}
-              <StaticQuery
-                query={graphql`
-                  {
-                    site {
-                      siteMetadata {
-                        description
-                      }
-                    }
-                  }
-                `}
-                render={(data: any) => {
-                  return (
-                    <Helmet>
-                      <meta name="description" content={data.site.siteMetadata.description} />
-                    </Helmet>
-                  )
-                }}
-              />
-            </Header>
-          </Affix>
 
           {/* 内容 */}
-          <div>{this.props.children}</div>
+          {this.props.children}
         </div>
         {/* 页尾 */}
         <Footer />
-      </div>
+      </>
     )
   }
 }

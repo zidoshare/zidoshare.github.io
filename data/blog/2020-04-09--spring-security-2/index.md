@@ -6,7 +6,6 @@ tags:
   - spring
   - source
   - spring-security
-image: header.png
 origin: true
 draft: false
 ---

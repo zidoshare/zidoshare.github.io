@@ -1,18 +1,18 @@
 import * as React from 'react'
-import ConnectedLayout from '../containers/LayoutContainer'
+import Layout from '../components/Layout'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { timeout } from '../contants/transition'
-import 'animate.css/source/fading_entrances/fadeInUp.css'
+import 'animate.css/source/fading_entrances/fadeIn.css'
 import './transition.scss'
 export default ({ element, props }: any) => {
   return (
-    <ConnectedLayout {...props}>
+    <Layout {...props}>
       <TransitionGroup>
         <CSSTransition
           key={props.location.pathname}
           classNames={{
             enter: 'animated',
-            enterActive: 'fadeInUp duration',
+            enterActive: 'fadeIn duration',
             exit: 'hide-exit',
           }}
           timeout={timeout}
@@ -21,6 +21,6 @@ export default ({ element, props }: any) => {
           {element}
         </CSSTransition>
       </TransitionGroup>
-    </ConnectedLayout>
+    </Layout>
   )
 }

@@ -8,7 +8,6 @@ createdDate: '2018-12-19'
 updatedDate: '2018-12-19'
 draft: false
 origin: true
-image: header.png
 ---
 
 > 本文主要用于记录一些使用 vim/ideavim 开发的心得笔记，为了速度也为了折腾

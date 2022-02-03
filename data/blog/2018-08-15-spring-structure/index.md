@@ -8,7 +8,6 @@ createdDate: '2018-08-15'
 updatedDate: '2018-08-15'
 draft: false
 origin: true
-image: header.png
 ---
 
 Spring 框架由大约 20 个功能模块组成。 这些模块分为核心容器，数据访问/集成，Web，AOP（面向方面的编程），仪器，消息传递和测试

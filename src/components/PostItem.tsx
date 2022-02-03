@@ -24,15 +24,15 @@ export default (props: PostItemProps) => {
       <div className={classes.itemMain}>
         <div className={classes.cover}>
           <Link to={href}>
-            <GatsbyImage image={cover} alt="xxx" />
+            <GatsbyImage image={cover} alt="cover" />
           </Link>
         </div>
         <div className={classes.itemElse}>
           <TagsCard Link={Link} tags={props.tags} origin={origin} />
-          <h3>
+          <h1>
             <Link to={href}>{title}</Link>
-          </h3>
-          <p dangerouslySetInnerHTML={{ __html: excerpt }} />
+          </h1>
+          <article className={classes.excerpt} dangerouslySetInnerHTML={{ __html: excerpt }} />
           <p className={classes.here}>
             共{words}字-大约需要阅读{timeToRead}min
           </p>

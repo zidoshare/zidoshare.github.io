@@ -1,9 +1,7 @@
 import * as React from 'react'
-import { LayoutProps } from '../components/Layout'
-import { HeaderDisptacherProps, WithLayout } from './LayoutContainer'
+import Position from '../components/base/Position'
 import BlogPost from '../components/BlogPost'
-import { HeaderType } from '../contants/header'
-interface BlogPostProps extends LayoutProps, HeaderDisptacherProps {
+interface BlogPostProps {
   data: {
     post: any
     recents: any
@@ -20,14 +18,8 @@ export default (props: BlogPostProps) => {
   const { slug } = post.fields
   const gitmentOptions = dataJson.gitment
   return (
-    <WithLayout
-      headerType={HeaderType.POST_HEADER}
-      data={{
-        ...post.frontmatter,
-        image: props.pageContext.header,
-      }}
-    >
-      <BlogPost slug={slug} commentOptions={gitmentOptions} post={post} />
-    </WithLayout>
+    <BlogPost slug={slug} commentOptions={gitmentOptions} post={post} >
+      <Position title={post.frontmatter.title} />
+    </BlogPost>
   )
 }

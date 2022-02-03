@@ -5,7 +5,6 @@ updatedDate: "2020-04-06"
 tags:
   - redis
   - source
-image: header.png
 origin: true
 draft: false
 ---

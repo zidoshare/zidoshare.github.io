@@ -1,5 +1,8 @@
 .mark-nav {
   border-left: 1px solid #eee;
+  background-color: #fff;
+  height: 60vh;
+  overflow-y: auto;
   a.head-nav-item {
     display: block;
     text-decoration: inherit;
@@ -15,13 +18,13 @@
       background-color: #f8f8f8;
     }
   }
-  a.nav-item-1 {
+  a.nav-item-1,
+  a.nav-item-2 {
     color: #000;
     font-size: 1.2em;
     padding-left: 1em;
     font-weight: 400;
   }
-  a.nav-item-2,
   a.nav-item-3,
   a.nav-item-4,
   a.nav-item-5,

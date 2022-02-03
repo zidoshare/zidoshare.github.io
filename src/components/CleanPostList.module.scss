@@ -4,6 +4,7 @@
 }
 .time {
   color: #adabac;
+  flex-shrink:0;
 }
 .title {
   margin-left: 20px;
@@ -11,6 +12,15 @@
 }
 .list {
   li {
+    width: 100%;
     list-style: none;
+  }
+  li > a {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    flex-direction:row;
+    justify-content: flex-start;
+    text-decoration: none;
+    align-items:baseline;
   }
 }

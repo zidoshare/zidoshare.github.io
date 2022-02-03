@@ -8,7 +8,6 @@ createdDate: '2018-09-03'
 updatedDate: '2018-09-03'
 draft: false
 origin: true
-image: header.png
 ---
 
 # 前言

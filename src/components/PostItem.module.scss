@@ -1,4 +1,4 @@
-.postItem {
+.post-item {
   margin: 0 auto 100px;
   max-width: 1200px;
   position: relative;
@@ -14,18 +14,18 @@
     &:nth-child(odd) {
       text-align: right;
     }
-    &:nth-child(even) .itemElse {
+    &:nth-child(even) .item-else {
       left: 660px;
     }
-    &:nth-child(odd) .itemElse {
+    &:nth-child(odd) .item-else {
       right: 660px;
     }
-    .itemElse {
+    .item-else {
       position: absolute;
       top: 20px;
     }
   }
-  .timeLabel {
+  .time-label {
     position: absolute;
     top: -30px;
     p {
@@ -43,7 +43,7 @@
       border-radius: 50%;
     }
   }
-  &:nth-child(even) .timeLabel {
+  &:nth-child(even) .time-label {
     left: 50%;
     vertical-align: middle;
     text-align: left;
@@ -54,7 +54,7 @@
       margin-left: 20px;
     }
   }
-  &:nth-child(odd) .timeLabel {
+  &:nth-child(odd) .time-label {
     right: 50%;
     vertical-align: middle;
     text-align: right;
@@ -66,7 +66,7 @@
     }
   }
 }
-.itemMain {
+.item-main {
   display: 'block';
   position: relative;
   &:hover {
@@ -88,15 +88,16 @@
     width: 680px;
   }
 }
-.itemElse {
+.item-else {
   text-decoration: none;
   background: #fff;
   height: 398px;
   width: 498px;
   margin: 0;
   text-align: left;
-  padding: 60px 80px 20px;
+  padding: 30px 80px 20px;
   border: 1px solid #eaeaea;
+  overflow: hidden;
   & p.first-child {
     color: #999;
     font-size: 12px;
@@ -104,7 +105,7 @@
   }
 }
 @media screen and (max-width: 1199px) {
-  .itemMain {
+  .item-main {
     text-align: center;
     padding-top: 16px;
     padding-left: 16px;
@@ -120,7 +121,7 @@
       display: block;
     }
   }
-  .itemElse {
+  .item-else {
     width: 100%;
     border: none;
     padding: 5px 0 20px;
@@ -128,15 +129,38 @@
   }
 }
 @media (min-width: 600px) {
-  .itemMain {
+  .item-main {
     padding-left: 24px;
     padding-right: 24px;
   }
 }
 .here {
   position: absolute;
-  left: 80;
-  bottom: 80;
+  left: 0;
+  bottom: 0;
   color: #999;
-  font-size: 12;
+  width: 100%;
+  margin: 0;
+  line-height: 40px;
+  background: #fff;
+  padding: 5px 20px 5px;
+  z-index: 2;
+}
+
+@media (min-width: 720px) {
+  .here {
+    padding: 0 80px 5px;
+    &::before{
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      height:40px;
+      width: 100%;
+      background: linear-gradient(rgba(255,255,255,0),#fff);
+    }
+  }
+}
+
+.excerpt{
+  position: relative;
 }

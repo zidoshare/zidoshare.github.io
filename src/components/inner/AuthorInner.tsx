@@ -1,42 +1,16 @@
 import * as React from 'react'
-import { ImageSharp, Query } from '../../graphql-types'
 import Bio from '../Bio'
 import './AuthorInner.scss'
 import { StaticQuery, graphql } from 'gatsby'
-import { connect } from 'react-redux'
-import { Dispatch, bindActionCreators } from 'redux'
-import { boom } from '../../actions/authorInner'
-import { debounce } from 'lodash'
-import {GatsbyImage} from 'gatsby-plugin-image'
-export interface AuthorInnerProps {
-  boom(): void
-}
+import { GatsbyImage } from 'gatsby-plugin-image'
 
-interface AuthorInnerState {
-  count: number
-}
-
-export class AuthorInner extends React.Component<AuthorInnerProps, AuthorInnerState> {
-  state: AuthorInnerState = {
-    count: 0,
-  }
-  private countDown = debounce(() => {
-    if (this.state.count < 20) {
-      this.setState({
-        count: 0,
-      })
-    } else {
-      this.props.boom()
-    }
-  }, 300)
-
-  private handleClick = () => {
-    this.setState({
-      count: ++this.state.count,
-    })
-    this.countDown()
-  }
+export default class AuthorInner extends React.Component {
   render() {
+    // avatar {
+    //   childrenImageSharp {
+    //     gatsbyImageData(width: 80, height: 80)
+    //   }
+    // }
     return (
       <StaticQuery
         query={graphql`
@@ -63,7 +37,7 @@ export class AuthorInner extends React.Component<AuthorInnerProps, AuthorInnerSt
             }
           }
         `}
-        render={(data: Query) => {
+        render={(data: any) => {
           const avatar = data.dataJson.author.avatar
           const totalCount = data.allMarkdownRemark.totalCount
           const { name } = data.dataJson.author
@@ -89,16 +63,3 @@ export class AuthorInner extends React.Component<AuthorInnerProps, AuthorInnerSt
     )
   }
 }
-
-const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(
-    {
-      boom,
-    },
-    dispatch
-  )
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(AuthorInner)

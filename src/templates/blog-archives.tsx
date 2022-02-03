@@ -1,6 +1,4 @@
 import * as React from 'react'
-import { WithLayout } from '../containers/LayoutContainer'
-import { HeaderType } from '../contants/header'
 import Archives from '../components/Archives'
 import Main from '../components/Main'
 import Position from '../components/base/Position'
@@ -16,11 +14,9 @@ export default (props: {
   }
 }) => {
   return (
-    <WithLayout headerType={HeaderType.AUTHOR_HEADER}>
+    <Main>
       <Position title="归档" />
-      <Main>
-        <Archives archives={props.pageContext.archives} />
-      </Main>
-    </WithLayout>
+      <Archives archives={props.pageContext.archives} />
+    </Main>
   )
 }

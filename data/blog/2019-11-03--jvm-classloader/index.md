@@ -9,7 +9,6 @@ createdDate: '2019-11-03'
 updatedDate: '2019-11-03'
 draft: true
 origin: true
-image: header.png
 ---
 
 # Java虚拟机

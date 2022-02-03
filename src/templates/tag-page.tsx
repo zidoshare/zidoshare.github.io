@@ -1,8 +1,6 @@
 import * as React from 'react'
 import { graphql } from 'gatsby'
 import Blog, { IndexProps } from '../containers/BlogContainer'
-import { WithLayout } from '../containers/LayoutContainer'
-import { HeaderType } from '../contants/header'
 import Position from '../components/base/Position'
 const TagPage = (
   props: IndexProps & {
@@ -12,15 +10,11 @@ const TagPage = (
   }
 ) => {
   return (
-    <WithLayout
-      headerType={HeaderType.POST_HEADER}
-      data={{
-        title: props.pageContext.tag,
-      }}
-    >
+    <>
       <Position title={props.pageContext.tag} />
       <Blog {...props} />
-    </WithLayout>
+    </>
+
   )
 }
 export default TagPage

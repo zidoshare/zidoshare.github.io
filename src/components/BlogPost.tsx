@@ -28,12 +28,15 @@ class BlogPost extends React.Component<BlogPostProps> {
     const { title } = this.props.post.frontmatter
     return (
       <Main>
+        <Position title={`${title}`} />
         <div className={classes.post}>
-          <Position title={`${title}`} />
-          <div dangerouslySetInnerHTML={{ __html: html }} />
+          <h1>
+            {title}
+          </h1>
+          <article dangerouslySetInnerHTML={{ __html: html }} className={classes.postBody} />
           {
             headings.length > 0 ? <div className={classes.rightNav}>
-              <Affix>
+              <Affix offsetTop={80}>
                 <MarkNav headings={headings} />
               </Affix>
             </div> : null

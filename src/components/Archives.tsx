@@ -8,7 +8,7 @@ export interface ArchivesProps {
 }
 
 export default (props: ArchivesProps) => (
-  <div>
+  <>
     {props.archives == null ? (
       <NoData />
     ) : (
@@ -21,5 +21,5 @@ export default (props: ArchivesProps) => (
         )
       })
     )}
-  </div>
+  </>
 )

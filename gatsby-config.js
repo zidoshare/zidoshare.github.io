@@ -23,12 +23,13 @@ module.exports = {
   siteMetadata: config.siteMetadata,
   plugins: [
     `gatsby-plugin-sass`,
-    {
-      resolve: `gatsby-plugin-typography`,
-      options: {
-        pathToConfigModule: `src/typography.js`,
-      },
-    },
+    `gatsby-plugin-react-helmet`,
+    // {
+    //   resolve: `gatsby-plugin-typography`,
+    //   options: {
+    //     pathToConfigModule: `src/typography.js`,
+    //   },
+    // },
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
@@ -119,7 +120,8 @@ module.exports = {
     // html file so the site works offline and is otherwise
     // resistant to bad networks. Works with almost any
     // site!
-    `gatsby-plugin-offline`,
+    // `gatsby-plugin-offline`,
+    `gatsby-plugin-remove-serviceworker`,
     {
       resolve: `gatsby-plugin-feed`,
       options: {

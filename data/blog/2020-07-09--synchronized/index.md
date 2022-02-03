@@ -6,7 +6,6 @@ tags:
   - java
   - 多线程
   - synchronized
-image: header.png
 origin: true
 draft: false
 ---

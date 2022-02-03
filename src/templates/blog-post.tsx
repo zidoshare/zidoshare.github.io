@@ -18,8 +18,6 @@ export const pageQuery = graphql`
     }
     post: markdownRemark(fields: { slug: { eq: $slug } }) {
       html
-      # 摘要
-      excerpt
       timeToRead
       fields {
         slug
