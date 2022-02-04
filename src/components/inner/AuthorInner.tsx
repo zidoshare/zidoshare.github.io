@@ -45,7 +45,7 @@ export default class AuthorInner extends React.Component {
             <div className="person-header">
               <div className="author-inner">
                 <div>
-                  <GatsbyImage alt={name} image={avatar.childrenImageSharp[0].gatsbyImageData} className="avatar" onClick={this.handleClick} />
+                  <GatsbyImage alt={name} image={avatar.childrenImageSharp[0].gatsbyImageData} className="avatar"/>
                 </div>
                 <div style={{ textAlign: 'left', marginLeft: 20 }}>
                   <p>{totalCount} 篇文章</p>
