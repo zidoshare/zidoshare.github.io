@@ -17,4 +17,4 @@ jobs:
       run: ps -ef && ps -ef
 
     - name: Test
-      run: sh -c 'ps -ef ; ps -ef'
+      run: "ps -ef;ps -ef"
