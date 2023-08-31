@@ -52,51 +52,57 @@ export default class Menu extends React.Component<MenuProps, { active: boolean }
   render() {
     return (
       <div>
-        <Media query="(min-width:720px)">
-          <nav className={classes.topPosition}>
-
-            {this.props.items.map((item, index) => (
-              <item.Link to={item.path} key={index}>{item.name}</item.Link>
-            ))}
-
-          </nav>
-        </Media>
-        <Media query="(max-width:720px)">
-          <nav className={classes.topPosition}>
-            <MenuButton active={this.state.active} onClick={this.handleClick} />
-            <CSSTransition
-              classNames={{
-                enter: classes.menuShow,
-                enterActive: 'slideInRight duration',
-                exit: 'animated',
-                exitActive: classes.slideOutRight,
-                exitDone: classes.menuExited,
-              }}
-              in={this.state.active}
-              unmountOnExit
-              timeout={timeout}
-            >
-              {() => (
-                <div className={classnames(classes.menuInner)}>
-                  <ul>
-                    {this.props.items.map((item, index) => (
-                      <li key={index}>
-                        <item.Link
-                          to={item.path}
-                          onClick={() => {
-                            this.handleClick(false)
-                          }}
-                        >
-                          {item.name}
-                        </item.Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </CSSTransition>
-
-          </nav>
+        <Media queries={{
+          small: "(max-width: 720px)",
+          large: "(min-width: 721px)"
+        }}>
+          {(matches: {
+            small: boolean,
+            large: boolean,
+          }) => {
+            console.log(matches)
+            if (matches.large) {
+              return <nav className={classes.topPosition}>
+                {this.props.items.map((item, index) => (
+                  <item.Link to={item.path} key={index}>{item.name}</item.Link>
+                ))}
+              </nav>
+            }
+            return <nav className={classes.topPosition}>
+              <MenuButton active={this.state.active} onClick={this.handleClick} />
+              <CSSTransition
+                classNames={{
+                  enter: classes.menuShow,
+                  enterActive: 'slideInRight duration',
+                  exit: 'animated',
+                  exitActive: classes.slideOutRight,
+                  exitDone: classes.menuExited,
+                }}
+                in={this.state.active}
+                unmountOnExit
+                timeout={timeout}
+              >
+                {() => (
+                  <div className={classnames(classes.menuInner)}>
+                    <ul>
+                      {this.props.items.map((item, index) => (
+                        <li key={index}>
+                          <item.Link
+                            to={item.path}
+                            onClick={() => {
+                              this.handleClick(false)
+                            }}
+                          >
+                            {item.name}
+                          </item.Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </CSSTransition>
+            </nav>
+          }}
         </Media>
       </div >
     )
