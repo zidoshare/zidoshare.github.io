@@ -7,6 +7,7 @@ tags:
   - containers
 origin: true
 draft: false
+image: header.jpg
 ---
 
 ## 用户态文件系统介绍

@@ -7,6 +7,7 @@ tags:
   - filesystem
 origin: true
 draft: false
+image: header.jpg
 ---
 # 什么是 overlayfs
 

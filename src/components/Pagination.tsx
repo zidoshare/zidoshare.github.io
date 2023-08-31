@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { GatsbyLinkProps, Link } from 'gatsby'
+import { GatsbyLinkProps } from 'gatsby'
 import { times } from 'lodash'
 import './Pagination.scss'
 
