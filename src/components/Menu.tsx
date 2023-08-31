@@ -60,7 +60,6 @@ export default class Menu extends React.Component<MenuProps, { active: boolean }
             small: boolean,
             large: boolean,
           }) => {
-            console.log(matches)
             if (matches.large) {
               return <nav className={classes.topPosition}>
                 {this.props.items.map((item, index) => (
