@@ -94,6 +94,6 @@
     "typography-theme-alton": "^0.16.18",
     "typography-theme-funston": "^0.16.18",
     "value-or-promise": "^1.0.10",
-    "webpack": "^5.24.3"
+    "webpack": "^5.76.0"
   }
 }
