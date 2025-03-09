@@ -44,7 +44,7 @@
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.28.0",
-    "gatsby": "^4.5.4",
+    "gatsby": "^4.25.7",
     "gatsby-plugin-baidu-analytics": "^2.2.0",
     "gatsby-plugin-feed": "^4.5.0",
     "gatsby-plugin-google-analytics": "^4.5.0",
