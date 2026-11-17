@@ -10,7 +10,7 @@ export const pageQuery = graphql`
   query TemplateBlogPage($skip: Int) {
     # Get tags
     tags: allMarkdownRemark(filter: { frontmatter: { draft: { ne: true } } }) {
-      group(field: frontmatter___tags) {
+      group(field: { frontmatter: { tags: SELECT } }) {
         fieldValue
         totalCount
       }
@@ -18,7 +18,7 @@ export const pageQuery = graphql`
 
     # Get posts
     posts: allMarkdownRemark(
-      sort: { order: DESC, fields: [frontmatter___updatedDate] }
+      sort: { frontmatter: { updatedDate: DESC } }
       filter: { frontmatter: { draft: { ne: true } }, fileAbsolutePath: { regex: "/blog/" } }
       limit: 10
       skip: $skip

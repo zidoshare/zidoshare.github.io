@@ -16,8 +16,6 @@ export interface BlogPostProps {
 
 class BlogPost extends React.Component<BlogPostProps> {
   div: HTMLDivElement = null
-  componentDidMount() {
-  }
   componentWillUnmount() {
     if (this.div) {
       this.div.remove()

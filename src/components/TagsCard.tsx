@@ -5,13 +5,13 @@ import * as classes from './TagsCard.module.scss'
 import classnames from 'classnames'
 
 export interface TagsCardProps extends React.HTMLProps<HTMLDivElement> {
-  tags: Array<
+  tags: (
     | string
     | {
         name: string
         count: number
       }
-  >
+  )[]
   Link: React.ComponentClass<GatsbyLinkProps<any>>
   origin?: boolean
   tagSize?: 'large' | 'small'

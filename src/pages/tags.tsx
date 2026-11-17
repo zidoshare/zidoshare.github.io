@@ -7,10 +7,10 @@ import NoData from '../components/base/NoData'
 export interface TagsPageProps {
   data: {
     tags: {
-      group: Array<{
+      group: {
         fieldValue: string
         totalCount: number
-      }>
+      }[]
     }
   }
 }
@@ -41,10 +41,10 @@ export default class TagsPage extends React.Component<TagsPageProps> {
 export const pageQuery = graphql`
   {
     tags: allMarkdownRemark(
-      sort: { order: DESC, fields: [frontmatter___updatedDate] }
+      sort: { frontmatter: { updatedDate: DESC } }
       filter: { frontmatter: { draft: { ne: true } }, fileAbsolutePath: { regex: "/blog/" } }
     ) {
-      group(field: frontmatter___tags, limit: 3) {
+      group(field: { frontmatter: { tags: SELECT } }, limit: 3) {
         fieldValue
         totalCount
       }

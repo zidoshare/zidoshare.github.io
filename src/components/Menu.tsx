@@ -53,8 +53,8 @@ export default class Menu extends React.Component<MenuProps, { active: boolean }
     return (
       <div>
         <Media queries={{
-          small: "(max-width: 720px)",
-          large: "(min-width: 721px)"
+          small: '(max-width: 720px)',
+          large: '(min-width: 721px)',
         }}>
           {(matches: {
             small: boolean,

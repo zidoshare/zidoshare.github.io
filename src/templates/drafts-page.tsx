@@ -13,7 +13,7 @@ export const pageQuery = graphql`
   query PageDrafts {
     # Get posts
     posts: allMarkdownRemark(
-      sort: { order: DESC, fields: [frontmatter___updatedDate] }
+      sort: { frontmatter: { updatedDate: DESC } }
       filter: { frontmatter: { draft: { eq: true } }, fileAbsolutePath: { regex: "/blog/" } }
       limit: 10
     ) {

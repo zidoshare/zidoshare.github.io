@@ -7,7 +7,7 @@ export default <T extends object>(WrappedComponent: React.ComponentType<T>) => {
       ReactDOM.render(<WrappedComponent {...this.props} />, document.getElementById('main-header'))
     }
     componentWillUnmount() {
-      let container = document.getElementById('main-header')
+      const container = document.getElementById('main-header')
       ReactDOM.unmountComponentAtNode(container)
     }
     render(): null {

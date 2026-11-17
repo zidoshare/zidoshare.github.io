@@ -20,6 +20,8 @@ const config = {
 }
 
 module.exports = {
+  // Gatsby 5 removed the v4 `legacy` default. Existing page paths and in-site links already use trailing slashes.
+  trailingSlash: 'always',
   siteMetadata: config.siteMetadata,
   plugins: [
     `gatsby-plugin-sass`,
@@ -115,7 +117,13 @@ module.exports = {
     `gatsby-transformer-json`,
     // Add typescript stack into webpack
     `gatsby-plugin-typescript`,
-    `gatsby-plugin-sitemap`,
+    {
+      resolve: `gatsby-plugin-sitemap`,
+      options: {
+        // v6 default moved the index to `/`. Keep the v5 output directory.
+        output: `/sitemap`,
+      },
+    },
     // This plugin generates a service worker and AppShell
     // html file so the site works offline and is otherwise
     // resistant to bad networks. Works with almost any
@@ -153,7 +161,7 @@ module.exports = {
               {
                 allMarkdownRemark(
                   limit: 1000,
-                  sort: { order: DESC, fields: [frontmatter___updatedDate] },
+                  sort: { frontmatter: { updatedDate: DESC } },
                   filter: {frontmatter: { draft: { ne: true } }, fileAbsolutePath: { regex: "/blog/" }}
                 ) {
                   edges {

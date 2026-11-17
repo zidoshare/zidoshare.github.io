@@ -22,7 +22,7 @@ export default TagPage
 export const pageQuery = graphql`
   query tagTemplate($tag: String!) {
     posts: allMarkdownRemark(
-      sort: { order: DESC, fields: [frontmatter___updatedDate] }
+      sort: { frontmatter: { updatedDate: DESC } }
       filter: { frontmatter: { draft: { ne: true }, tags: { in: [$tag] } }, fileAbsolutePath: { regex: "/blog/" } }
     ) {
       totalCount
